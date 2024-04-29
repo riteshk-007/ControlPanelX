@@ -101,7 +101,7 @@ const Navbar = () => {
 
                 <Link
                   className="rounded-md md:hidden block w-full text-center text-sm font-medium"
-                  href="/"
+                  href="/login-user"
                   onClick={() => setShow(false)}
                 >
                   <Button
@@ -128,7 +128,7 @@ const Navbar = () => {
 
           <div className="flex items-center gap-4">
             <div className="sm:flex sm:gap-4">
-              <Link href="/">
+              <Link href="/login-user">
                 <Button
                   variant="outline"
                   className="text-black bg-gray-100 shadow"
