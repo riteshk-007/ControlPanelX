@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  companyName String
+  email     String  @unique
+  password  String
+  users     User[]
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userName   String
+  email      String   @unique
+  phoneNumber String
+  password   String
+  joiningDate DateTime @default(now())
+  domainName String?
+  renewDate   DateTime?
+  dashboardLoginUrl String?
+  dashboardId String?
+  dashboardPassword String?
+  cPanelLoginUrl String?
+  renewAmount Float?
+  payment Payment[]
+  hosting Hosting[]
+  createdBy  String  @db.ObjectId
+  admin      Admin   @relation(fields: [createdBy], references: [id])
+}
+
+model Payment {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId String  @db.ObjectId
+  user   User    @relation(fields: [userId], references: [id])
+  amount Float
+  date   DateTime @default(now())
+}
+
+model Hosting {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String  @db.ObjectId
+  user      User    @relation(fields: [userId], references: [id])
+  hostingType String
+  domains    Int
+}
