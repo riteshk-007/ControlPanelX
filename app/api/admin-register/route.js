@@ -1,15 +1,12 @@
-import prisma from "@/DB/db.config";
 import { NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
+import prisma from "@/DB/db.config";
 
 export const POST = async (req) => {
-  const { email, password, userName, phoneNumber, createdBy } =
-    await req.json();
+  const { email, password, name, companyName } = await req.json();
   try {
     if (
-      [email, password, userName, phoneNumber, createdBy].some(
-        (field) => field?.trim() === ""
-      )
+      [email, password, name, companyName].some((field) => field?.trim() === "")
     ) {
       return NextResponse.json({
         message: "Please fill all the fields",
@@ -23,7 +20,7 @@ export const POST = async (req) => {
       });
     }
     const hashedPassword = await bcryptjs.hash(password, 10);
-    const emailCheck = await prisma.user.findUnique({
+    const emailCheck = await prisma.admin.findUnique({
       where: {
         email: email,
       },
@@ -34,13 +31,12 @@ export const POST = async (req) => {
         status: 400,
       });
     }
-    const user = await prisma.user.create({
+    const user = await prisma.admin.create({
       data: {
         email,
         password: hashedPassword,
-        userName,
-        phoneNumber,
-        createdBy,
+        name,
+        companyName,
       },
     });
     return NextResponse.json({
