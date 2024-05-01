@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Layout from "./components/layout";
 import { AuthProvider } from "./components/Provider";
 import { Toaster } from "react-hot-toast";
 
@@ -19,12 +18,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <div className="bg-[#111] text-white">
-          <Layout>
-            <AuthProvider>
-              <Toaster position="bottom-right" />
-              {children}
-            </AuthProvider>
-          </Layout>
+          <AuthProvider>
+            <Toaster position="bottom-right" />
+            {children}
+          </AuthProvider>
         </div>
       </body>
     </html>

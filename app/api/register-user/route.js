@@ -3,14 +3,9 @@ import { NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 
 export const POST = async (req) => {
-  const { email, password, userName, phoneNumber, createdBy } =
-    await req.json();
+  const { name, phone, email, password, data = {} } = await req.json();
   try {
-    if (
-      [email, password, userName, phoneNumber, createdBy].some(
-        (field) => field?.trim() === ""
-      )
-    ) {
+    if ([name, phone, email, password].some((field) => field?.trim() === "")) {
       return NextResponse.json({
         message: "Please fill all the fields",
         status: 400,
@@ -36,11 +31,11 @@ export const POST = async (req) => {
     }
     const user = await prisma.user.create({
       data: {
+        name,
+        phone,
         email,
         password: hashedPassword,
-        userName,
-        phoneNumber,
-        createdBy,
+        data,
       },
     });
     return NextResponse.json({

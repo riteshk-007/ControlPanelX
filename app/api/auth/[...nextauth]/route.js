@@ -9,11 +9,11 @@ export const authOptions = {
       name: "Credentials",
       credentials: {},
       authorize: async (credentials) => {
-        const user = await prisma.admin.findUnique({
+        const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
         if (!user) {
-          throw new Error("No user found");
+          throw new Error("user not found or invalid email");
         }
         const isValid = await bcrypt.compare(
           credentials.password,
@@ -31,10 +31,12 @@ export const authOptions = {
       return token;
     },
     session: async ({ session, token }) => {
+      console.log("session", session);
+      console.log("token", token);
       if (session.user) {
         session.user.id = token.sub;
       }
-      return session;
+      return console.log(session), session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
@@ -43,7 +45,7 @@ export const authOptions = {
     maxAge: 30 * 24 * 60 * 60,
   },
   pages: {
-    signIn: "/admin-login",
+    signIn: "/login-user",
   },
 };
 
