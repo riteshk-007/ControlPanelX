@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const HeroSection = () => {
@@ -29,9 +30,12 @@ const HeroSection = () => {
             To access cPanel credentials, users need to obtain permission from
             the super admin.
           </p>
-          <button className="bg-white text-[#111] px-6 py-3 rounded-md font-semibold">
+          <Link
+            href="/login-user"
+            className="bg-white text-[#111] px-6 py-3 rounded-md font-semibold"
+          >
             Get Started
-          </button>
+          </Link>
         </div>
         <div className="md:w-1/2 flex items-center justify-center p-2">
           <Image

@@ -5,6 +5,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
 
 const AdminForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,7 +18,33 @@ const AdminForm = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+      const res = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+
+      if (res.error) {
+        throw new Error(res.error);
+      }
+
+      router.push("/dashboard");
+      toast.success("Logged in successfully", {
+        style: {
+          background: "#4caf50",
+          color: "#ffffff",
+        },
+      });
+    } catch (error) {
+      console.error("An error occurred during sign in:", error.message);
+      toast.error(error.message, {
+        style: {
+          background: "#f44336",
+          color: "#ffffff",
+        },
+      });
+    }
   };
   return (
     <main className="w-full h-screen flex flex-col items-center justify-center sm:px-4">
