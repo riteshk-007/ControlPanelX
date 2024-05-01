@@ -29,7 +29,7 @@ const AdminForm = () => {
         throw new Error(res.error);
       }
 
-      router.push("/dashboard");
+      router.push("/admin-dashboard");
       toast.success("Logged in successfully", {
         style: {
           background: "#4caf50",

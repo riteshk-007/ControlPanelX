@@ -22,7 +22,8 @@ const Dashboard = () => {
     <div>
       {isLoggedIn ? (
         <>
-          Logged in as {session?.user.email} with id {session?.user?.id}
+          Logged in as {session?.user.email} with id {session?.user?.id} and{" "}
+          {session?.user.isAdmin ? "is an admin" : "is not an admin"}
         </>
       ) : (
         "You are not logged in"

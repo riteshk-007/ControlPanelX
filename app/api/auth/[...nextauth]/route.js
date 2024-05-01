@@ -12,9 +12,6 @@ export const authOptions = {
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
-        if (user && user.isAdmin === true) {
-          throw new Error("Admins cannot login here");
-        }
         if (!user) {
           throw new Error("user not found or invalid email");
         }
