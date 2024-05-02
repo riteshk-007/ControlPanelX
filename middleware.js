@@ -10,6 +10,20 @@ export async function middleware(req) {
 
   const { pathname } = req.nextUrl;
 
+  // Check if the pathname starts with "/dashboard" and the user is not authenticated
+  if (pathname.startsWith("/dashboard") && !session) {
+    return NextResponse.redirect(new URL("/login-user", req.url));
+  }
+
+  // Check if the pathname starts with "/admin-dashboard"
+  if (pathname.startsWith("/admin-dashboard")) {
+    const user = session?.user;
+    // If the user is not authenticated or not an admin, redirect to the dashboard
+    if (!user || !user.isAdmin) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
+  }
+
   // Redirect authenticated users from login and landing routes
   if (session) {
     if (["/login-user", "/admin-login", "/"].includes(pathname)) {
@@ -50,8 +64,8 @@ export async function middleware(req) {
 
 export const config = {
   matcher: [
-    "/admin-dashboard",
-    "/dashboard",
+    "/admin-dashboard/:path*",
+    "/dashboard/:path*",
     "/login-user",
     "/admin-login",
     "/",
