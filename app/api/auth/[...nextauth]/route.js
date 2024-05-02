@@ -31,6 +31,7 @@ export const authOptions = {
       if (user) {
         token.user = user;
         token.isAdmin = user.isAdmin;
+        token.phone = user.phone;
       }
       return token;
     },
@@ -39,6 +40,7 @@ export const authOptions = {
       if (session.user) {
         session.user.id = token.sub;
         session.user.isAdmin = token.isAdmin;
+        session.user.phone = token.phone;
       }
       return session;
     },

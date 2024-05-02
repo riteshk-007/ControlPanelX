@@ -20,17 +20,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const SideNav = () => {
-  const { data: session } = useSession();
-  const links = [
-    { name: "Dashboard", icon: Home },
-    { name: "Orders", icon: ShoppingCart },
-    { name: "Products", icon: Package },
-    { name: "Customers", icon: Users },
-    { name: "Analytics", icon: LineChart },
-  ];
+const links = [
+  { name: "Dashboard", icon: Home },
+  { name: "Orders", icon: ShoppingCart },
+  { name: "Products", icon: Package },
+  { name: "Customers", icon: Users },
+  { name: "Analytics", icon: LineChart },
+];
 
+const SideNav = () => {
   const [activeLink, setActiveLink] = useState(links[0].name);
+
+  const { data: session } = useSession();
 
   console.log(session);
 
