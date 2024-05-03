@@ -15,6 +15,22 @@ export const getAllUsers = createAsyncThunk(
     }
   }
 );
+// Fetching a single user
+export const getUser = createAsyncThunk(
+  "user/getUser",
+  async (id, thunkAPI) => {
+    try {
+      const user = await fetch(`/api/all-users/${id}`, {
+        cache: "no-cache",
+      });
+      const data = await user.json();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
 export const UserSlice = createSlice({
   name: "user",
   initialState: {
@@ -33,6 +49,18 @@ export const UserSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(getAllUsers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(getUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
