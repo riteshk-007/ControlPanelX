@@ -7,6 +7,13 @@ export const GET = async (_) => {
       where: {
         isAdmin: false,
       },
+      include: {
+        domains: true,
+        hosting: true,
+        dashboard: true,
+        cpanel: true,
+        adminSettings: true,
+      },
     });
     if (!user || user.length === 0) {
       return NextResponse.error({ message: "No admin users found" });

@@ -53,9 +53,11 @@ const UserInfo = ({ session }) => {
 
   return (
     <>
-      <h1 className="text-xl md:text-3xl font-bold text-center md:text-start mt-5">
-        User Information
-      </h1>
+      {user?.data && (
+        <h1 className="text-xl md:text-3xl font-bold text-center md:text-start mt-5">
+          User Information
+        </h1>
+      )}
       <div className="w-full grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 p-2 gap-4 mt-5">
         {/* User Name */}
         {user?.data?.name && (

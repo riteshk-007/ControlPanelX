@@ -14,11 +14,58 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  phone     String
-  email     String   @unique
-  password  String
-  isAdmin   Boolean @default(false)
-  data      Json?
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  email          String   @unique
+  password       String
+  phone          String?
+  isAdmin        Boolean @default(false)
+  domains        Domain[]
+  hosting        Hosting[]
+  dashboard      Dashboard[]
+  cpanel         Cpanel[]
+  adminSettings AdminSettings?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Domain {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  purchasedAt String
+  price       Float
+  user        User?    @relation(fields: [userId], references: [id])
+  userId      String?  @db.ObjectId
+}
+
+model Hosting {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  user        User?     @relation(fields: [userId], references: [id])
+  userId      String?   @db.ObjectId
+  purchasedAt String
+  price       Float
+}
+
+model Dashboard {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  user        User?   @relation(fields: [userId], references: [id])
+  userId      String? @db.ObjectId
+  loginUrl    String
+  dashboardId String
+  password    String
+}
+
+model Cpanel {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  user     User?   @relation(fields: [userId], references: [id])
+  userId   String? @db.ObjectId
+  cpanelId String
+  password String
+}
+model AdminSettings {
+ id           String @id @default(auto()) @map("_id") @db.ObjectId
+ user         User?   @relation(fields: [userId], references: [id])
+ userId       String? @db.ObjectId @unique
+ razorpayKey String
+ razorpaySecret String
 }

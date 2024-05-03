@@ -12,7 +12,11 @@ export const GET = async (_, { params }) => {
         name: true,
         email: true,
         phone: true,
-        data: true,
+        domains: true,
+        hosting: true,
+        dashboard: true,
+        cpanel: true,
+        adminSettings: true,
       },
     });
     if (!user)

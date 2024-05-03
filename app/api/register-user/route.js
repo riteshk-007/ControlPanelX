@@ -3,9 +3,14 @@ import { NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 
 export const POST = async (req) => {
-  const { name, phone, email, password, data = {} } = await req.json();
+  const { name, phone, email, password, domains, hosting, dashboard, cpanel } =
+    await req.json();
   try {
-    if ([name, phone, email, password].some((field) => field?.trim() === "")) {
+    if (
+      [name, phone, email, password, domains, hosting, dashboard, cpanel].some(
+        (field) => String(field)?.trim() === ""
+      )
+    ) {
       return NextResponse.json({
         message: "Please fill all the fields",
         status: 400,
@@ -35,7 +40,18 @@ export const POST = async (req) => {
         phone,
         email,
         password: hashedPassword,
-        data,
+        domains: {
+          create: domains,
+        },
+        hosting: {
+          create: hosting,
+        },
+        dashboard: {
+          create: dashboard,
+        },
+        cpanel: {
+          create: cpanel,
+        },
       },
     });
     return NextResponse.json({
