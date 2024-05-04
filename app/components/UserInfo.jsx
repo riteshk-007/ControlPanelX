@@ -210,8 +210,12 @@ const UserInfo = ({ session }) => {
                 <div className="flex flex-col items-start justify-start gap-2">
                   <CardTitle className="text-base">Cpanel URL:</CardTitle>
                   <CardDescription>
-                    <a target="_blank" href={cpanel?.cpanelUrl}>
-                      {cpanel?.cpanelUrl}
+                    <a
+                      target="_blank"
+                      href={cpanel?.cpanelId}
+                      className="text-blue-400 hover:underline"
+                    >
+                      {cpanel?.cpanelId}
                     </a>
                   </CardDescription>
 
@@ -222,10 +226,10 @@ const UserInfo = ({ session }) => {
                 </div>
 
                 <Button
-                  onClick={() => copyToClipboard(cpanel?.cpanelUrl)}
+                  onClick={() => copyToClipboard(cpanel?.cpanelId)}
                   className="p-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-900"
                 >
-                  {copiedText === cpanel?.cpanelUrl ? (
+                  {copiedText === cpanel?.cpanelId ? (
                     <Check className="text-sm" />
                   ) : (
                     <Copy />

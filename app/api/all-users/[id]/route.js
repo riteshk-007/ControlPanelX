@@ -15,7 +15,13 @@ export const GET = async (_, { params }) => {
         domains: true,
         hosting: true,
         dashboard: true,
-        cpanel: true,
+        cpanel: {
+          select: {
+            id: true,
+            userId: true,
+            cpanelId: true,
+          },
+        },
         adminSettings: true,
       },
     });
