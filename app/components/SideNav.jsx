@@ -32,11 +32,14 @@ const SideNav = () => {
   const [activeLink, setActiveLink] = useState(links[0].name);
 
   const { data: session } = useSession();
+  const isAdmin = session?.user?.isAdmin;
 
-  console.log(session);
+  const filteredLinks = isAdmin
+    ? links
+    : links.filter((link) => link.name === "Dashboard");
 
   return (
-    <div className=" border-r border-gray-600 bg-black text-white h-screen block md:w-60">
+    <div className="border-r border-gray-600 bg-black text-white h-auto block md:w-60">
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center justify-center md:justify-normal border-b border-gray-600 px-4 lg:h-[60px] lg:px-6">
           <Link
@@ -51,7 +54,7 @@ const SideNav = () => {
         </div>
         <div className="flex-1">
           <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
-            {links.map((link) => {
+            {filteredLinks?.map((link) => {
               const Icon = link.icon;
               const isActive = link.name === activeLink;
               return (
