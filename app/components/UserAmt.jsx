@@ -28,11 +28,11 @@ const UserAmt = ({ session }) => {
   const totalAmount = domainTotal + hostingTotal;
 
   return (
-    <Card className="sm:col-span-2 bg-black text-white border border-gray-700 w-full sm:min-w-96  mt-5 md:w-1/2 lg:w-1/3">
+    <Card className="sm:col-span-2 w-full sm:min-w-96 text-gray-900 border-gray-400 shadow-md  mt-5 md:w-1/2 lg:w-1/3">
       <CardHeader className="pb-3">
         <CardTitle>Total Amount</CardTitle>
         <div className="text-lg font-semibold">
-          <div className="text-2xl font-semibold text-green-500">
+          <div className="text-2xl font-semibold text-green-600">
             ₹ {totalAmount || "0.00"}
           </div>
         </div>

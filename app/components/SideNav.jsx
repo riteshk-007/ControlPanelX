@@ -39,7 +39,7 @@ const SideNav = () => {
     : links.filter((link) => link.name === "Dashboard");
 
   return (
-    <div className="border-r border-gray-600 bg-black text-white h-auto block md:w-60">
+    <div className="border-r text-gray-900 border-gray-400 shadow-md h-screen block md:w-60 sticky top-0">
       <div className="flex h-full max-h-screen flex-col gap-2">
         <div className="flex h-14 items-center justify-center md:justify-normal border-b border-gray-600 px-4 lg:h-[60px] lg:px-6">
           <Link
@@ -65,7 +65,7 @@ const SideNav = () => {
                         href="/dashboard"
                         onClick={() => setActiveLink(link.name)}
                         className={`flex items-center justify-center md:justify-normal gap-3 rounded-lg px-3 py-2 transition-all hover:text-gray-500 ${
-                          isActive ? "bg-muted text-primary" : "text-gray-200"
+                          isActive ? "bg-black text-muted" : "text-gray-200"
                         }`}
                       >
                         <Icon className="md:h-4 md:w-4 w-5 h-5" />

@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="bg-[#111] text-white">
+        <div className="bg-blue-50 text-black">
           <AuthProvider>
             <ReduxProvider>
               <Toaster position="bottom-right" />
