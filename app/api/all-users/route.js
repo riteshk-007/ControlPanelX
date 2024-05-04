@@ -34,3 +34,36 @@ export const GET = async (_) => {
     return NextResponse.error({ message: error.message });
   }
 };
+export const POST = async (req) => {
+  try {
+    const { id } = await req.json();
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        domains: {
+          select: {
+            price: true,
+          },
+        },
+        hosting: {
+          select: {
+            price: true,
+          },
+        },
+      },
+    });
+    if (!user)
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+
+    return NextResponse.json({
+      status: 200,
+      data: user,
+      message: "User Total Amount found",
+    });
+  } catch (error) {
+    console.log(error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+};
