@@ -3,13 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getUser } from "@/helper/AnyUser";
-import { Check, Clipboard } from "lucide-react";
+import { Check, Copy, Eye, EyeOff, IndianRupee } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SkeletonCard from "./Skeleton";
 
 const UserInfo = ({ session }) => {
   const [copiedText, setCopiedText] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   // Fetching user
   const dispatch = useDispatch();
@@ -36,10 +37,21 @@ const UserInfo = ({ session }) => {
     return () => clearTimeout(timer);
   }, [copiedText]);
 
-  // renew date
-  const fixedDate = new Date(user?.data?.hosting);
-  const renewDate = new Date(user?.data?.hosting);
-  renewDate.setFullYear(renewDate.getFullYear() + 1);
+  // renew Date
+  function formatDate(date) {
+    const options = { month: "long", day: "numeric", year: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
+
+  function formatRenewalDate(date) {
+    const renewalDate = new Date(
+      date.getFullYear() + 1,
+      date.getMonth(),
+      date.getDate()
+    );
+    const options = { month: "long", day: "numeric", year: "numeric" };
+    return renewalDate.toLocaleDateString("en-US", options);
+  }
 
   if (loading) {
     return (
@@ -74,7 +86,7 @@ const UserInfo = ({ session }) => {
               {copiedText === user?.data?.name ? (
                 <Check className="text-sm" />
               ) : (
-                <Clipboard className="text-sm" />
+                <Copy />
               )}
             </Button>
           </Card>
@@ -94,7 +106,7 @@ const UserInfo = ({ session }) => {
               {copiedText === user?.data?.email ? (
                 <Check className="text-sm" />
               ) : (
-                <Clipboard className="text-sm" />
+                <Copy />
               )}
             </Button>
           </Card>
@@ -114,134 +126,196 @@ const UserInfo = ({ session }) => {
               {copiedText === user?.data?.phone ? (
                 <Check className="text-sm" />
               ) : (
-                <Clipboard className="text-sm" />
+                <Copy />
               )}
             </Button>
           </Card>
         )}
         {/* Domain name */}
-        {user?.data?.domain && (
-          <Card className="p-2 bg-black text-gray-200 border-gray-600 w-full justify-between items-center flex">
-            <div className="flex flex-col items-start justify-start gap-2">
-              <CardTitle className="text-base">domain:</CardTitle>
-              <CardDescription>
-                <a target="_blank" href={user?.data?.domain}>
-                  {user?.data?.domain}
-                </a>
-              </CardDescription>
-            </div>
 
-            <Button
-              onClick={() => copyToClipboard(user?.data?.domain)}
-              className="p-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-900"
+        {user?.data?.domains &&
+          user?.data?.domains.map((domain) => (
+            <Card
+              key={domain.id}
+              className="p-2 bg-black text-gray-200 border-gray-600 w-full justify-between items-center flex"
             >
-              {copiedText === user?.data?.domain ? (
-                <Check className="text-sm" />
-              ) : (
-                <Clipboard className="text-sm" />
-              )}
-            </Button>
-          </Card>
-        )}
+              <div className="flex flex-col items-start justify-start gap-2">
+                <CardTitle className="text-base">domain:</CardTitle>
+                <CardDescription>
+                  <a
+                    target="_blank"
+                    href={domain?.name}
+                    className="text-blue-400 hover:underline"
+                  >
+                    name : {domain?.name}
+                  </a>
+                  <p>price : ₹ {domain?.price}</p>
+                </CardDescription>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <Button
+                  onClick={() => copyToClipboard(domain?.name)}
+                  className="p-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-900"
+                >
+                  {copiedText === domain?.name ? (
+                    <Check className="text-sm" />
+                  ) : (
+                    <Copy />
+                  )}
+                </Button>
+                <Button
+                  onClick={() => console.log(domain?.price)}
+                  className="p-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-900"
+                >
+                  <IndianRupee />
+                </Button>
+              </div>
+            </Card>
+          ))}
+
         {/* Hosting  join & renew*/}
-        {user?.data?.hosting && (
-          <Card className="p-2 bg-black text-gray-200 border-gray-600 w-full justify-between items-center flex">
-            <div className="flex flex-col items-start justify-start gap-2">
-              <CardTitle className="text-base">Hosting:</CardTitle>
-              <CardDescription>
-                Join Date: {fixedDate.toDateString()} <br />
-                Renew Date: {renewDate.toDateString()}
-              </CardDescription>
-            </div>
-          </Card>
-        )}
+
+        {user?.data?.hosting &&
+          user?.data?.hosting.map((host) => (
+            <Card
+              key={host.id}
+              className="p-2 bg-black text-gray-200 border-gray-600 w-full justify-between items-center flex"
+            >
+              <div className="flex flex-col items-start justify-start gap-2">
+                <CardTitle className="text-base">Hosting:</CardTitle>
+                <CardDescription className="space-y-1">
+                  Join Date: {formatDate(new Date(host?.purchasedAt))}
+                  <br />
+                  Renew Date: {formatRenewalDate(new Date(host?.purchasedAt))}
+                  <p>price : ₹ {host?.price}</p>
+                </CardDescription>
+              </div>
+              <Button
+                onClick={() => console.log(host?.price)}
+                className="p-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-900"
+              >
+                <IndianRupee />
+              </Button>
+            </Card>
+          ))}
+        {/* cPanel */}
+        {user?.data?.cpanel &&
+          user?.data?.cpanel?.map((cpanel) => (
+            <Card
+              key={cpanel?.id}
+              className="p-2 bg-black text-gray-200 border-gray-600 w-full justify-between items-center flex"
+            >
+              <div className="flex items-start justify-center">
+                <div className="flex flex-col items-start justify-start gap-2">
+                  <CardTitle className="text-base">Cpanel URL:</CardTitle>
+                  <CardDescription>
+                    <a target="_blank" href={cpanel?.cpanelUrl}>
+                      {cpanel?.cpanelUrl}
+                    </a>
+                  </CardDescription>
+
+                  <span className="text-sm  p-2 rounded-md shadow-md">
+                    If you need the cPanel ID and password, please contact the
+                    admin.
+                  </span>
+                </div>
+
+                <Button
+                  onClick={() => copyToClipboard(cpanel?.cpanelUrl)}
+                  className="p-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-900"
+                >
+                  {copiedText === cpanel?.cpanelUrl ? (
+                    <Check className="text-sm" />
+                  ) : (
+                    <Copy />
+                  )}
+                </Button>
+              </div>
+            </Card>
+          ))}
         {/* Dashboard  login URL*/}
-        {user?.data?.dashUrl && (
-          <Card className="p-2 bg-black text-gray-200 border-gray-600 w-full justify-between items-center flex">
-            <div className="flex flex-col items-start justify-start gap-2">
-              <CardTitle className="text-base">Dashboard URL:</CardTitle>
-              <CardDescription>
-                <a target="_blank" href={user?.data?.dashUrl}>
-                  {user?.data?.dashUrl}
-                </a>
-              </CardDescription>
-            </div>
 
-            <Button
-              onClick={() => copyToClipboard(user?.data?.dashUrl)}
-              className="p-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-900"
+        {user?.data?.dashboard &&
+          user?.data?.dashboard?.map((dash) => (
+            <Card
+              key={dash.id}
+              className="p-2 bg-black text-gray-200 border-gray-600 w-full justify-between items-center flex"
             >
-              {copiedText === user?.data?.dashUrl ? (
-                <Check className="text-sm" />
-              ) : (
-                <Clipboard className="text-sm" />
-              )}
-            </Button>
-          </Card>
-        )}
-        {/* dashboard id*/}
-        {user?.data?.dashId && (
-          <Card className="p-2 bg-black text-gray-200 border-gray-600 w-full justify-between items-center flex">
-            <div className="flex flex-col items-start justify-start gap-2">
-              <CardTitle className="text-base">Dashboard ID:</CardTitle>
-              <CardDescription>{user?.data?.dashId}</CardDescription>
-            </div>
+              <div className="w-full flex flex-col items-start justify-start gap-2">
+                <CardTitle className="text-base">Dashboard URL:</CardTitle>
+                <div className="w-full flex justify-between items-center">
+                  <CardDescription>
+                    <a
+                      target="_blank"
+                      href={dash?.loginUrl}
+                      className="text-blue-400 hover:underline"
+                    >
+                      URL: {dash?.loginUrl}
+                    </a>
+                  </CardDescription>
 
-            <Button
-              onClick={() => copyToClipboard(user?.data?.dashId)}
-              className="p-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-900"
-            >
-              {copiedText === user?.data?.dashId ? (
-                <Check className="text-sm" />
-              ) : (
-                <Clipboard className="text-sm" />
-              )}
-            </Button>
-          </Card>
-        )}
-        {/* dashboard password*/}
-        {user?.data?.dashpass && (
-          <Card className="p-2 bg-black text-gray-200 border-gray-600 w-full justify-between items-center flex">
-            <div className="flex flex-col items-start justify-start gap-2">
-              <CardTitle className="text-base">Dashboard Password:</CardTitle>
-              <CardDescription>{user?.data?.dashpass}</CardDescription>
-            </div>
+                  <Button
+                    onClick={() => copyToClipboard(dash?.loginUrl)}
+                    className="p-1 w-6 h-6 rounded-full bg-gray-800 hover:bg-gray-900"
+                  >
+                    {copiedText === dash?.loginUrl ? (
+                      <Check className="text-sm" />
+                    ) : (
+                      <Copy />
+                    )}
+                  </Button>
+                </div>
+                <div className="w-full flex justify-between items-center">
+                  <CardDescription>
+                    <span>ID: {dash?.dashboardId}</span>
+                  </CardDescription>
 
-            <Button
-              onClick={() => copyToClipboard(user?.data?.dashpass)}
-              className="p-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-900"
-            >
-              {copiedText === user?.data?.dashpass ? (
-                <Check className="text-sm" />
-              ) : (
-                <Clipboard className="text-sm" />
-              )}
-            </Button>
-          </Card>
-        )}
-        {user?.data?.cpanel && (
-          <Card className="p-2 bg-black text-gray-200 border-gray-600 w-full justify-between items-center flex">
-            <div className="flex flex-col items-start justify-start gap-2">
-              <CardTitle className="text-base">Cpanel URL:</CardTitle>
-              <CardDescription>
-                <a target="_blank" href={user?.data?.cpanel}>
-                  {user?.data?.cpanel}
-                </a>
-              </CardDescription>
-            </div>
+                  <Button
+                    onClick={() => copyToClipboard(dash?.dashboardId)}
+                    className="p-1 w-6 h-6 rounded-full bg-gray-800 hover:bg-gray-900"
+                  >
+                    {copiedText === dash?.dashboardId ? (
+                      <Check className="text-sm" />
+                    ) : (
+                      <Copy />
+                    )}
+                  </Button>
+                </div>
+                <div className="w-full flex justify-between items-center">
+                  <CardDescription>
+                    <span>
+                      Password: {showPassword ? dash?.password : "••••••••"}
+                    </span>
+                  </CardDescription>
 
-            <Button
-              onClick={() => copyToClipboard(user?.data?.cpanel)}
-              className="p-2 w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-900"
-            >
-              {copiedText === user?.data?.cpanel ? (
-                <Check className="text-sm" />
-              ) : (
-                <Clipboard className="text-sm" />
-              )}
-            </Button>
-          </Card>
-        )}
+                  <div className="flex items-center justify-center gap-2">
+                    {showPassword ? (
+                      <EyeOff
+                        className="p-1 w-7 h-7"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    ) : (
+                      <Eye
+                        className="p-1 w-7 h-7"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    )}
+                    <Button
+                      onClick={() => copyToClipboard(dash?.password)}
+                      className="p-1 w-6 h-6 rounded-full bg-gray-800 hover:bg-gray-900"
+                    >
+                      {copiedText === dash?.password ? (
+                        <Check className="text-sm" />
+                      ) : (
+                        <Copy />
+                      )}
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          ))}
       </div>
     </>
   );
