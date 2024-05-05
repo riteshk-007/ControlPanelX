@@ -60,7 +60,7 @@ const Navbar = () => {
                 </Link>
                 <li>
                   <Link
-                    className="text-gray-800 transition-all  hover:text-gray-800/75"
+                    className="text-white md:text-gray-800 transition-all  hover:text-gray-800/75"
                     onClick={() => setShow(false)}
                     href="/"
                   >
@@ -70,7 +70,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    className="text-gray-800 transition-all  hover:text-gray-800/75"
+                    className="text-white md:text-gray-800 transition-all  hover:text-gray-800/75"
                     onClick={() => setShow(false)}
                     href="/"
                   >
@@ -80,7 +80,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    className="text-gray-800 transition-all  hover:text-gray-800/75"
+                    className="text-white md:text-gray-800 transition-all  hover:text-gray-800/75"
                     onClick={() => setShow(false)}
                     href="/"
                   >
@@ -91,7 +91,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    className="text-gray-800 transition-all  hover:text-gray-800/75"
+                    className="text-white md:text-gray-800 transition-all  hover:text-gray-800/75"
                     onClick={() => setShow(false)}
                     href="/"
                   >
@@ -141,7 +141,7 @@ const Navbar = () => {
             <div className="block md:hidden">
               <button
                 onClick={handleMenuClick}
-                className=" md:hidden block text-white mx-2  rounded-md font-semibold text-sm cursor-pointer shadow-md"
+                className=" md:hidden block text-white bg-gray-600 p-1 mx-2  rounded-md font-semibold text-sm cursor-pointer shadow-md"
               >
                 {show ? (
                   <X size={28} strokeWidth={2.5} />
