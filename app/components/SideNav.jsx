@@ -7,6 +7,7 @@ import {
   Package,
   ShoppingCart,
   User,
+  UserRoundPlus,
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,12 +23,9 @@ import {
 
 const links = [
   { name: "Dashboard", icon: Home },
-  { name: "Orders", icon: ShoppingCart },
-  { name: "Products", icon: Package },
-  { name: "Customers", icon: Users },
-  { name: "Analytics", icon: LineChart },
+  { name: "All Users", icon: Users },
+  { name: "Create User", icon: UserRoundPlus },
 ];
-
 const SideNav = () => {
   const [activeLink, setActiveLink] = useState(links[0].name);
 
@@ -65,7 +63,7 @@ const SideNav = () => {
                         href="/dashboard"
                         onClick={() => setActiveLink(link.name)}
                         className={`flex items-center justify-center md:justify-normal gap-3 rounded-lg px-3 py-2 transition-all hover:text-gray-500 ${
-                          isActive ? "bg-black text-muted" : "text-gray-200"
+                          isActive ? "bg-black text-muted" : "text-gray-600"
                         }`}
                       >
                         <Icon className="md:h-4 md:w-4 w-5 h-5" />
