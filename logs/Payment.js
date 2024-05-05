@@ -1,7 +1,10 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import Head from "next/head";
 
 const Checkout = ({ data }) => {
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
@@ -9,6 +12,16 @@ const Checkout = ({ data }) => {
     document.body.appendChild(script);
 
     script.onload = () => {
+      setScriptLoaded(true);
+    };
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (scriptLoaded) {
       const options = {
         key: process.env.RAZORPAY_KEY_ID,
         amount: data?.amount * 100,
@@ -17,7 +30,7 @@ const Checkout = ({ data }) => {
         description:
           "Control panel X is a platform that helps you to manage your business with ease.",
         image: "/icon.png",
-        handler: async function (response) {
+        handler: async function () {
           const res = await fetch("/api/payment", {
             cache: "no-cache",
             method: "POST",
@@ -29,23 +42,25 @@ const Checkout = ({ data }) => {
               amount: data?.amount,
             }),
           });
+
           if (res.ok) {
             console.log("User created successfully");
           } else {
             console.log("Something went wrong");
           }
+
           alert("Payment Successful");
+          window.location.reload();
         },
-        prefill: {},
         theme: {
-          color: "#3e9c35",
+          color: "#000000",
         },
       };
 
       const rzp = new window.Razorpay(options);
       rzp.open();
-    };
-  }, [data]);
+    }
+  }, [scriptLoaded, data]);
 
   return null;
 };
