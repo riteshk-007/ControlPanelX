@@ -10,7 +10,9 @@ const UserAmt = ({ session }) => {
 
   // get user all amount
   useEffect(() => {
-    dispatch(getUserTotalAmount(session?.user?.id));
+    if (session?.user?.id) {
+      dispatch(getUserTotalAmount(session?.user?.id));
+    }
   }, [dispatch, session?.user?.id]);
 
   // get user total amount

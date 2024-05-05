@@ -60,7 +60,7 @@ const Navbar = () => {
                 </Link>
                 <li>
                   <Link
-                    className="text-gray-200 transition-all  hover:text-gray-200/75"
+                    className="text-gray-800 transition-all  hover:text-gray-800/75"
                     onClick={() => setShow(false)}
                     href="/"
                   >
@@ -70,7 +70,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    className="text-gray-200 transition-all  hover:text-gray-200/75"
+                    className="text-gray-800 transition-all  hover:text-gray-800/75"
                     onClick={() => setShow(false)}
                     href="/"
                   >
@@ -80,7 +80,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    className="text-gray-200 transition-all  hover:text-gray-200/75"
+                    className="text-gray-800 transition-all  hover:text-gray-800/75"
                     onClick={() => setShow(false)}
                     href="/"
                   >
@@ -91,7 +91,7 @@ const Navbar = () => {
 
                 <li>
                   <Link
-                    className="text-gray-200 transition-all  hover:text-gray-200/75"
+                    className="text-gray-800 transition-all  hover:text-gray-800/75"
                     onClick={() => setShow(false)}
                     href="/"
                   >
@@ -131,7 +131,7 @@ const Navbar = () => {
               <Link href="/login-user">
                 <Button
                   variant="outline"
-                  className="text-black bg-gray-100 shadow"
+                  className="shadow bg-black text-muted hover:bg-gray-800 hover:text-white"
                 >
                   Login
                 </Button>
