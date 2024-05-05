@@ -1,15 +1,6 @@
 "use client";
 import Link from "next/link";
-import {
-  Home,
-  LineChart,
-  LogOut,
-  Package,
-  ShoppingCart,
-  User,
-  UserRoundPlus,
-  Users,
-} from "lucide-react";
+import { Home, LogOut, User, UserRoundPlus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
@@ -21,16 +12,24 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const links = [
-  { name: "Dashboard", icon: Home },
-  { name: "All Users", icon: Users },
-  { name: "Create User", icon: UserRoundPlus },
-];
 const SideNav = () => {
-  const [activeLink, setActiveLink] = useState(links[0].name);
-
   const { data: session } = useSession();
   const isAdmin = session?.user?.isAdmin;
+  const links = [
+    {
+      name: "Dashboard",
+      icon: Home,
+      link: isAdmin ? "/admin-dashboard" : "/dashboard",
+    },
+    { name: "All Users", icon: Users, link: "/admin-dashboard/all-users" },
+    {
+      name: "Create User",
+      icon: UserRoundPlus,
+      link: "/admin-dashboard/create-user",
+    },
+  ];
+
+  const [activeLink, setActiveLink] = useState(links[0].name);
 
   const filteredLinks = isAdmin
     ? links
@@ -60,7 +59,7 @@ const SideNav = () => {
                   <Tooltip>
                     <TooltipTrigger>
                       <Link
-                        href="/dashboard"
+                        href={link.link}
                         onClick={() => setActiveLink(link.name)}
                         className={`flex items-center justify-center md:justify-normal gap-3 rounded-lg px-3 py-2 transition-all hover:text-gray-500 ${
                           isActive ? "bg-black text-muted" : "text-gray-600"
