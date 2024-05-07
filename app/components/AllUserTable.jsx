@@ -3,6 +3,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllUsers } from "@/helper/AnyUser";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,7 +18,7 @@ const AllUserTable = () => {
 
   // format date
   function formatDate(date) {
-    const options = { month: "long", day: "numeric", year: "numeric" };
+    const options = { month: "numeric", day: "numeric", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
   }
   function formatRenewalDate(date) {
@@ -26,14 +27,14 @@ const AllUserTable = () => {
       date.getMonth(),
       date.getDate()
     );
-    const options = { month: "long", day: "numeric", year: "numeric" };
+    const options = { month: "numeric", day: "numeric", year: "numeric" };
     return renewalDate.toLocaleDateString("en-US", options);
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="rounded-md text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <div className="overflow-x-auto w-full mt-5 rounded-md shadow-2xl">
+      <table className="rounded-md text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full">
+        <thead className="text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" className="p-4">
               No.
@@ -56,15 +57,21 @@ const AllUserTable = () => {
             <th scope="col" className="px-3 sm:px-6 py-3">
               Amount
             </th>
+            <th scope="col" className="px-3 sm:px-6 py-3">
+              Profile
+            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
           {loading ? (
             <tr>
               <td colSpan="8">
-                <Skeleton className="w-full h-[40px] rounded my-1 bg-gray-400" />
-                <Skeleton className="w-full h-[40px] rounded my-1 bg-gray-400" />
-                <Skeleton className="w-full h-[40px] rounded my-1 bg-gray-400" />
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <Skeleton
+                    key={index}
+                    className="w-full h-[60px] rounded my-1 bg-gray-400"
+                  />
+                ))}
               </td>
             </tr>
           ) : user?.data?.length === 0 ? (
@@ -127,17 +134,17 @@ const AllUserTable = () => {
                   {user?.hosting ? (
                     user?.hosting?.map((hosting) => (
                       <span key={hosting?.id} className="text-black">
-                        <p className="text-red-500">
+                        <span className="text-[#FF6347]">
                           {" "}
-                          Join Date:{" "}
+                          <p className="hidden lg:block">Join Date: </p>
                           {formatDate(new Date(hosting?.purchasedAt))}
-                        </p>
+                        </span>
                         <br />
-                        <p className="text-green-500">
+                        <span className="text-[#4169E1]">
                           {" "}
-                          Renew Date:{" "}
+                          <p className="hidden lg:block">Renew Date: </p>
                           {formatRenewalDate(new Date(hosting?.purchasedAt))}
-                        </p>
+                        </span>
                       </span>
                     ))
                   ) : (
@@ -146,7 +153,7 @@ const AllUserTable = () => {
                 </td>
 
                 <td className="px-3 sm:px-6 py-4">
-                  <span className="text-green-500">
+                  <span className="font-bold">
                     ₹
                     {user?.domains?.reduce(
                       (total, domain) => total + domain?.price,
@@ -157,6 +164,14 @@ const AllUserTable = () => {
                         0
                       )}
                   </span>
+                </td>
+                <td className="px-3 sm:px-6 py-4">
+                  <Link
+                    href={`/admin-dashboard/all-users/${user?.id}`}
+                    className=" bg-[#0b1534] text-white p-2  text-sm rounded hover:bg-[#0b1534] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#0b1534] focus:ring-opacity-50"
+                  >
+                    View
+                  </Link>
                 </td>
               </tr>
             ))
