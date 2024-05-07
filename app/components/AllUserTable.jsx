@@ -81,7 +81,8 @@ const AllUserTable = () => {
               </td>
             </tr>
           ) : (
-            user?.data?.map((user, index) => (
+            Array.isArray(user?.data) &&
+            user?.data.map((user, index) => (
               <tr
                 key={user?.id}
                 className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
