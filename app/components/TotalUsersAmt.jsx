@@ -12,10 +12,15 @@ const TotalUsersAmt = () => {
     dispatch(getAllUsers());
   }, [dispatch]);
 
-  // Ensure users is always an array by providing a default value
-  const users = useSelector((state) => state?.user?.user?.data) || [];
+  const users =
+    useSelector((state) => (state?.user?.user ? state.user.user.data : [])) ||
+    [];
 
   function calculateTotalAmount(users) {
+    if (!users || !Array.isArray(users)) {
+      console.error("users is not an array or is null/undefined:", users);
+      return 0; // Return a default value or handle the error as needed
+    }
     let totalAmount = 0;
 
     for (const user of users) {

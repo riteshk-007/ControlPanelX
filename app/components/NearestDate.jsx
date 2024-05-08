@@ -24,7 +24,9 @@ const NearestDate = () => {
     fetchData();
   }, [dispatch]);
 
-  const users = useSelector((state) => state?.user?.user?.data) || [];
+  const users =
+    useSelector((state) => (state?.user?.user ? state.user.user.data : [])) ||
+    [];
 
   if (loading) {
     return (
@@ -46,6 +48,11 @@ const NearestDate = () => {
   const getHostingRenewalDates = () => {
     const today = new Date();
     const hostingRenewalDates = [];
+
+    if (!Array.isArray(users)) {
+      console.error("users is not an array:", users);
+      return hostingRenewalDates;
+    }
 
     for (const user of users) {
       for (const hosting of user.hosting) {
