@@ -1,5 +1,6 @@
 "use client";
 import LoginUser from "@/app/components/LoginUser";
+import NearestDate from "@/app/components/NearestDate";
 import TotalUsers from "@/app/components/TotalUsers";
 import TotalUsersAmt from "@/app/components/TotalUsersAmt";
 import { useSession } from "next-auth/react";
@@ -20,6 +21,7 @@ const AdminDashboard = () => {
         <TotalUsers />
         <TotalUsersAmt />
       </div>
+      <NearestDate />
     </div>
   );
 };

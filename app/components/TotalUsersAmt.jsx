@@ -12,7 +12,8 @@ const TotalUsersAmt = () => {
     dispatch(getAllUsers());
   }, [dispatch]);
 
-  const users = useSelector((state) => state?.user?.user?.data);
+  // Ensure users is always an array by providing a default value
+  const users = useSelector((state) => state?.user?.user?.data) || [];
 
   function calculateTotalAmount(users) {
     let totalAmount = 0;
