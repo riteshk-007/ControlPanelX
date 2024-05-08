@@ -51,6 +51,7 @@ const NearestDate = () => {
 
     if (!Array.isArray(users)) {
       console.error("users is not an array:", users);
+      console.clear();
       return hostingRenewalDates;
     }
 

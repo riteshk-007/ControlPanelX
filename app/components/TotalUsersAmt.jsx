@@ -19,6 +19,7 @@ const TotalUsersAmt = () => {
   function calculateTotalAmount(users) {
     if (!users || !Array.isArray(users)) {
       console.error("users is not an array or is null/undefined:", users);
+      console.clear();
       return 0; // Return a default value or handle the error as needed
     }
     let totalAmount = 0;
