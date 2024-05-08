@@ -16,17 +16,9 @@ export const POST = async (req) => {
   } = await req.json();
   try {
     if (
-      [
-        name,
-        phone,
-        email,
-        password,
-        domains,
-        hosting,
-        dashboard,
-        cpanel,
-        adminSettings,
-      ].some((field) => String(field)?.trim() === "")
+      [name, phone, email, password].some(
+        (field) => String(field)?.trim() === ""
+      )
     ) {
       return NextResponse.json({
         message: "Please fill all the fields",

@@ -1,5 +1,7 @@
 "use client";
+import { CreateUser } from "@/helper/CreateUserSlice";
 import { useForm, useWatch } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 const CreateUserform = () => {
   const {
@@ -13,9 +15,31 @@ const CreateUserform = () => {
     control,
     name: ["domains", "hosting", "dashboard", "cpanel"],
   });
-
+  const dispatch = useDispatch();
   const onSubmit = (data) => {
-    console.log(data);
+    if (data.domains) {
+      data.domains = data.domains.filter(
+        (domain) => domain.price.trim() !== ""
+      );
+      data.domains.forEach((domain) => {
+        domain.price = parseInt(domain.price, 10);
+      });
+    }
+    if (data.hosting) {
+      data.hosting = data.hosting.filter(
+        (hosting) => hosting.price.trim() !== ""
+      );
+      data.hosting.forEach((hosting) => {
+        hosting.price = parseInt(hosting.price, 10);
+      });
+    }
+    if (data.cpanel) {
+      data.cpanel = data.cpanel.filter(
+        (cpanel) =>
+          cpanel.cpanelId.trim() !== "" && cpanel.password.trim() !== ""
+      );
+    }
+    dispatch(CreateUser(data));
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className=" mx-auto">
@@ -27,6 +51,7 @@ const CreateUserform = () => {
           type="text"
           id="name"
           className="w-full px-3 py-2 border border-gray-300 rounded"
+          placeholder="Name"
           {...register("name", { required: "Name is required" })}
         />
         {errors.name && <p className="text-red-500">{errors.name.message}</p>}
@@ -40,6 +65,7 @@ const CreateUserform = () => {
           type="email"
           id="email"
           className="w-full px-3 py-2 border border-gray-300 rounded"
+          placeholder="Email"
           {...register("email", {
             required: "Email is required",
             pattern: {
@@ -59,6 +85,7 @@ const CreateUserform = () => {
           type="password"
           id="password"
           className="w-full px-3 py-2 border border-gray-300 rounded"
+          placeholder="Password"
           {...register("password", { required: "Password is required" })}
         />
         {errors.password && (
@@ -74,6 +101,7 @@ const CreateUserform = () => {
           type="tel"
           id="phone"
           className="w-full px-3 py-2 border border-gray-300 rounded"
+          placeholder="Phone"
           {...register("phone", {
             required: "Phone number is required",
             pattern: {
@@ -106,6 +134,7 @@ const CreateUserform = () => {
             type="date"
             id="domains.0.purchasedAt"
             className="w-full px-3 py-2 border border-gray-300 rounded mb-2"
+            placeholder="Purchased At"
             {...register("domains.0.purchasedAt", {
               required: watchedFields?.domains?.some((field) => !!field),
             })}
@@ -119,6 +148,7 @@ const CreateUserform = () => {
             type="number"
             id="domains.0.price"
             className="w-full px-3 py-2 border border-gray-300 rounded"
+            placeholder="Price"
             {...register("domains.0.price", {
               required: watchedFields?.domains?.some((field) => !!field),
             })}
@@ -138,6 +168,7 @@ const CreateUserform = () => {
             type="date"
             id="hosting.0.purchasedAt"
             className="w-full px-3 py-2 border border-gray-300 rounded mb-2"
+            placeholder="Purchased At"
             {...register("hosting.0.purchasedAt", {
               required: watchedFields?.hosting?.some((field) => !!field),
             })}
@@ -151,6 +182,7 @@ const CreateUserform = () => {
             type="number"
             id="hosting.0.price"
             className="w-full px-3 py-2 border border-gray-300 rounded"
+            placeholder="Price"
             {...register("hosting.0.price", {
               required: watchedFields?.hosting?.some((field) => !!field),
             })}
