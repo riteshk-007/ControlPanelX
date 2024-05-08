@@ -1,6 +1,7 @@
 "use client";
 import LoginUser from "@/app/components/LoginUser";
 import TotalUsers from "@/app/components/TotalUsers";
+import TotalUsersAmt from "@/app/components/TotalUsersAmt";
 import { useSession } from "next-auth/react";
 import React from "react";
 
@@ -17,6 +18,7 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <LoginUser session={session} />
         <TotalUsers />
+        <TotalUsersAmt />
       </div>
     </div>
   );
