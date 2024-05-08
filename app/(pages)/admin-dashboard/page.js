@@ -1,5 +1,6 @@
 "use client";
 import LoginUser from "@/app/components/LoginUser";
+import TotalUsers from "@/app/components/TotalUsers";
 import { useSession } from "next-auth/react";
 import React from "react";
 
@@ -13,8 +14,9 @@ const AdminDashboard = () => {
       <p className="md:text-lg text-sm text-center md:text-start">
         🎉 Welcome to the User Management Control Panel X 🚀
       </p>
-      <div className="w-full flex items-center justify-between gap-4 flex-wrap">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <LoginUser session={session} />
+        <TotalUsers />
       </div>
     </div>
   );

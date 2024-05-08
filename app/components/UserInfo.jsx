@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { getUser } from "@/helper/AnyUser";
-import { Check, Copy, Eye, EyeOff, IndianRupee } from "lucide-react";
+import { Check, Copy, Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SkeletonCard from "./Skeleton";
@@ -155,7 +155,6 @@ const UserInfo = ({ session }) => {
                   >
                     name : {domain?.name}
                   </a>
-                  <p>price : ₹ {domain?.price}</p>
                 </CardDescription>
               </div>
 
@@ -169,12 +168,6 @@ const UserInfo = ({ session }) => {
                   ) : (
                     <Copy />
                   )}
-                </Button>
-                <Button
-                  onClick={() => console.log(domain?.price)}
-                  className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
-                >
-                  <IndianRupee />
                 </Button>
               </div>
             </Card>
@@ -194,15 +187,8 @@ const UserInfo = ({ session }) => {
                   Join Date: {formatDate(new Date(host?.purchasedAt))}
                   <br />
                   Renew Date: {formatRenewalDate(new Date(host?.purchasedAt))}
-                  <p>price : ₹ {host?.price}</p>
                 </CardDescription>
               </div>
-              <Button
-                onClick={() => console.log(host?.price)}
-                className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
-              >
-                <IndianRupee />
-              </Button>
             </Card>
           ))}
         {/* cPanel */}

@@ -15,7 +15,7 @@ const LoginUser = ({ session }) => {
     : "0000 0000 00";
   return (
     <Card
-      className="sm:col-span-2  w-full sm:min-w-96 text-gray-900 border-gray-400 shadow-md mt-5 md:w-1/2 lg:w-1/3"
+      className="text-gray-900 border-gray-400 shadow-md mt-5 "
       x-chunk="dashboard-05-chunk-0"
     >
       <CardHeader className="pb-3">
