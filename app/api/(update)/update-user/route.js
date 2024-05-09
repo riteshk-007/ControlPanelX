@@ -40,15 +40,13 @@ export const PATCH = async (req) => {
     if (updateData.password) {
       updateData.password = await bcryptjs.hash(updateData.password, 10);
     }
-
-    const updatedUser = await prisma.user.update({
+    await prisma.user.update({
       where: { id: userId },
       data: updateData,
     });
 
     return NextResponse.json({
       status: 200,
-      body: updatedUser,
       message: "User updated successfully",
     });
   } catch (error) {

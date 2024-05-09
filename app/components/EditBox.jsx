@@ -13,12 +13,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import toast from "react-hot-toast";
 
 const EditBox = ({ name, value, updateInfo, onChange }) => {
   const updateInformation = () => {
     updateInfo();
-    toast.success(`${name} updated successfully!`);
   };
 
   return (
@@ -33,7 +31,7 @@ const EditBox = ({ name, value, updateInfo, onChange }) => {
           <DialogTitle>Edit {name}</DialogTitle>
           <DialogDescription>
             {
-              "Update your details here. Don't forget to click 'Save' once you're finished making changes."
+              "Update your details here. Don't forget to click 'Update' once you're finished making changes."
             }
           </DialogDescription>
         </DialogHeader>

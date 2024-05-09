@@ -3,6 +3,7 @@ import EditBox from "@/app/components/EditBox";
 import SkeletonCard from "@/app/components/Skeleton";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getUser } from "@/helper/AnyUser";
+import { updateBasicInfo } from "@/helper/UpdateSlice";
 import { Eye, EyeOff } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -50,8 +51,24 @@ const User = () => {
     return renewalDate.toLocaleDateString("en-US", options);
   }
 
+  useEffect(() => {
+    setValue({
+      name: user?.data?.name,
+      email: user?.data?.email,
+      phone: user?.data?.phone,
+    });
+  }, [user?.data?.name, user?.data?.email, user?.data?.phone]);
   const updateinfo = () => {
-    console.log("update info");
+    dispatch(
+      updateBasicInfo({
+        userId: user?.data?.id,
+        updateData: {
+          name: value?.name,
+          email: value?.email,
+          phone: value?.phone,
+        },
+      })
+    );
   };
   return (
     <div className="w-full p-4">
@@ -77,7 +94,7 @@ const User = () => {
               </div>
               <EditBox
                 name={"Name"}
-                value={user?.data?.name}
+                value={value?.name}
                 onChange={(e) => setValue({ ...value, name: e.target.value })}
                 updateInfo={updateinfo}
               />
