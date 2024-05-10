@@ -36,14 +36,13 @@ export const PATCH = async (req) => {
       });
     }
 
-    const updatedDomain = await prisma.domain.update({
+    await prisma.domain.update({
       where: { id: domainId },
       data: updateData,
     });
 
     return NextResponse.json({
       status: 200,
-      body: updatedDomain,
       message: "Domain updated successfully",
     });
   } catch (error) {

@@ -3,7 +3,7 @@ import EditBox from "@/app/components/EditBox";
 import SkeletonCard from "@/app/components/Skeleton";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getUser } from "@/helper/AnyUser";
-import { updateBasicInfo } from "@/helper/UpdateSlice";
+import { updateBasicInfo, updateDomainInfo } from "@/helper/UpdateSlice";
 import { Eye, EyeOff } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -51,6 +51,7 @@ const User = () => {
     return renewalDate.toLocaleDateString("en-US", options);
   }
 
+  // update user basic info
   useEffect(() => {
     setValue({
       name: user?.data?.name,
@@ -70,6 +71,33 @@ const User = () => {
       })
     );
   };
+  // update domain info
+  useEffect(() => {
+    setValue({
+      domain: user?.data?.domains?.map((domain) => domain?.name),
+      domainPrice: user?.data?.domains?.map((domain) => domain?.price),
+    });
+  }, [user?.data?.domains, user?.data?.domains?.price]);
+
+  const updateDomain = () => {
+    dispatch(
+      updateDomainInfo({
+        domainId: user?.data?.domains?.map((domain) => domain?.id).join(", "),
+        userId: user?.data?.id,
+        updateData: {
+          name:
+            value && Array.isArray(value.domain)
+              ? value.domain.join("")
+              : value.domain,
+          price:
+            value && Array.isArray(value.domainPrice)
+              ? parseInt(value.domainPrice.join(""))
+              : parseInt(value.domainPrice),
+        },
+      })
+    );
+  };
+
   return (
     <div className="w-full p-4">
       <h1 className="text-2xl font-semibold text-gray-800">
@@ -164,7 +192,7 @@ const User = () => {
                     onChange={(e) =>
                       setValue({ ...value, domain: e.target.value })
                     }
-                    updateInfo={updateinfo}
+                    updateInfo={updateDomain}
                   />
                   <EditBox
                     name={"Domain Price"}
@@ -172,7 +200,7 @@ const User = () => {
                     onChange={(e) =>
                       setValue({ ...value, domainPrice: e.target.value })
                     }
-                    updateInfo={updateinfo}
+                    updateInfo={updateDomain}
                   />
                 </div>
               </Card>

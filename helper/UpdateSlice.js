@@ -27,6 +27,36 @@ export const updateBasicInfo = createAsyncThunk(
     }
   }
 );
+// update User Domain information
+export const updateDomainInfo = createAsyncThunk(
+  "update/updateDomainInfo",
+  async (data, thunkAPI) => {
+    try {
+      const domain = await fetch("/api/update-domain", {
+        method: "PATCH",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: data?.userId,
+          domainId: data?.domainId,
+          updateData: data?.updateData,
+        }),
+      });
+      const response = await domain.json();
+      if (response.status === 200) {
+        toast.success("Domain updated successfully!");
+        return response.body;
+      } else {
+        toast.error(response.message);
+        return thunkAPI.rejectWithValue({ error: response.message });
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
 export const updateSlice = createSlice({
   name: "update",
   initialState: {
@@ -45,6 +75,18 @@ export const updateSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(updateBasicInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(updateDomainInfo.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateDomainInfo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(updateDomainInfo.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
