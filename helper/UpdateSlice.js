@@ -114,6 +114,32 @@ export const UpdateDashboard = createAsyncThunk(
     }
   }
 );
+// update cPanel information
+export const UpdateCpanel = createAsyncThunk(
+  "update/updateCpanel",
+  async (data, thunkAPI) => {
+    try {
+      const cpanel = await fetch("/api/update-cpanel", {
+        method: "PATCH",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const response = await cpanel.json();
+      if (response.status === 200) {
+        toast.success("cPanel updated successfully!");
+        return response.body;
+      } else {
+        toast.error(response.message);
+        return thunkAPI.rejectWithValue({ error: response.message });
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
 export const updateSlice = createSlice({
   name: "update",
   initialState: {
@@ -168,6 +194,18 @@ export const updateSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(UpdateDashboard.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(UpdateCpanel.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(UpdateCpanel.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(UpdateCpanel.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

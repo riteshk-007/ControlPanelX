@@ -34,14 +34,13 @@ export const PATCH = async (req) => {
       });
     }
 
-    const updatedCpanel = await prisma.cpanel.update({
+    await prisma.cpanel.update({
       where: { id: cpanelId },
       data: updateData,
     });
 
     return NextResponse.json({
       status: 200,
-      body: updatedCpanel,
       message: "cPanel updated successfully",
     });
   } catch (error) {

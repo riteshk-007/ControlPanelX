@@ -4,6 +4,7 @@ import SkeletonCard from "@/app/components/Skeleton";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getUser } from "@/helper/AnyUser";
 import {
+  UpdateCpanel,
   UpdateDashboard,
   updateBasicInfo,
   updateDomainInfo,
@@ -148,6 +149,21 @@ const User = () => {
     );
   };
 
+  // update cpanel info
+  const updateCpanel = () => {
+    dispatch(
+      UpdateCpanel({
+        userId: user?.data?.id,
+        cpanelId: user?.data?.cpanel?.map((cpanel) => cpanel?.id).join(", "),
+        updateData: {
+          cpanelId:
+            value && Array.isArray(value.cpanel)
+              ? value.cpanel.join("")
+              : value.cpanel,
+        },
+      })
+    );
+  };
   return (
     <div className="w-full p-4">
       <h1 className="text-2xl font-semibold text-gray-800">
@@ -155,7 +171,7 @@ const User = () => {
       </h1>
       {loading ? (
         <div className="w-full grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 p-2 gap-4 mt-5">
-          {Array.from({ length: 7 }).map((_, index) => (
+          {Array.from({ length: 8 }).map((_, index) => (
             <SkeletonCard key={index} />
           ))}
         </div>
@@ -318,7 +334,7 @@ const User = () => {
                   onChange={(e) =>
                     setValue({ ...value, cpanel: e.target.value })
                   }
-                  updateInfo={updateinfo}
+                  updateInfo={updateCpanel}
                 />
               </div>
             </Card>
