@@ -87,6 +87,33 @@ export const updateHostingInfo = createAsyncThunk(
     }
   }
 );
+
+// update dashboard information
+export const UpdateDashboard = createAsyncThunk(
+  "update/updateDashboard",
+  async (data, thunkAPI) => {
+    try {
+      const dashboard = await fetch("/api/update-dashboard", {
+        method: "PATCH",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      const response = await dashboard.json();
+      if (response.status === 200) {
+        toast.success("Dashboard updated successfully!");
+        return response.body;
+      } else {
+        toast.error(response.message);
+        return thunkAPI.rejectWithValue({ error: response.message });
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
 export const updateSlice = createSlice({
   name: "update",
   initialState: {
@@ -129,6 +156,18 @@ export const updateSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(updateHostingInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(UpdateDashboard.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(UpdateDashboard.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(UpdateDashboard.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

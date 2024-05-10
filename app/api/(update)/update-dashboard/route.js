@@ -36,14 +36,13 @@ export const PATCH = async (req) => {
       });
     }
 
-    const updatedDashboard = await prisma.dashboard.update({
+    await prisma.dashboard.update({
       where: { id: dashboardId },
       data: updateData,
     });
 
     return NextResponse.json({
       status: 200,
-      body: updatedDashboard,
       message: "Dashboard updated successfully",
     });
   } catch (error) {

@@ -4,6 +4,7 @@ import SkeletonCard from "@/app/components/Skeleton";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getUser } from "@/helper/AnyUser";
 import {
+  UpdateDashboard,
   updateBasicInfo,
   updateDomainInfo,
   updateHostingInfo,
@@ -61,8 +62,16 @@ const User = () => {
       name: user?.data?.name,
       email: user?.data?.email,
       phone: user?.data?.phone,
+      domain: user?.data?.domains?.map((domain) => domain?.name),
+      domainPrice: user?.data?.domains?.map((domain) => domain?.price),
+      hostingDate: user?.data?.hosting?.map((host) => host?.purchasedAt),
+      hostingPrice: user?.data?.hosting?.map((host) => host?.price),
+      dashboardUrl: user?.data?.dashboard?.map((dash) => dash?.loginUrl),
+      dashboardId: user?.data?.dashboard?.map((dash) => dash?.dashboardId),
+      dashboardPassword: user?.data?.dashboard?.map((dash) => dash?.password),
+      cpanel: user?.data?.cpanel?.map((cpanel) => cpanel?.cpanelId),
     });
-  }, [user?.data?.name, user?.data?.email, user?.data?.phone]);
+  }, [user?.data]);
   const updateinfo = () => {
     dispatch(
       updateBasicInfo({
@@ -76,13 +85,6 @@ const User = () => {
     );
   };
   // update domain info
-  useEffect(() => {
-    setValue({
-      domain: user?.data?.domains?.map((domain) => domain?.name),
-      domainPrice: user?.data?.domains?.map((domain) => domain?.price),
-    });
-  }, [user?.data?.domains, user?.data?.domains?.price]);
-
   const updateDomain = () => {
     dispatch(
       updateDomainInfo({
@@ -102,12 +104,6 @@ const User = () => {
     );
   };
   // update hosting info
-  useEffect(() => {
-    setValue({
-      hostingDate: user?.data?.hosting?.map((host) => host?.purchasedAt),
-      hostingPrice: user?.data?.hosting?.map((host) => host?.price),
-    });
-  }, [user?.data?.hosting, user?.data?.hosting?.price]);
 
   const updateHosting = () => {
     dispatch(
@@ -127,6 +123,30 @@ const User = () => {
       })
     );
   };
+  //update dashboard info
+
+  const updateDashboard = () => {
+    dispatch(
+      UpdateDashboard({
+        userId: user?.data?.id,
+        dashboardId: user?.data?.dashboard?.map((dash) => dash?.id).join(", "),
+        updateData: {
+          loginUrl:
+            value && Array.isArray(value.dashboardUrl)
+              ? value.dashboardUrl.join("")
+              : value.dashboardUrl,
+          dashboardId:
+            value && Array.isArray(value.dashboardId)
+              ? value.dashboardId.join("")
+              : value.dashboardId,
+          password:
+            value && Array.isArray(value.dashboardPassword)
+              ? value.dashboardPassword.join("")
+              : value.dashboardPassword,
+        },
+      })
+    );
+  };
 
   return (
     <div className="w-full p-4">
@@ -142,7 +162,7 @@ const User = () => {
       ) : (
         <div className="w-full grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 mt-4">
           {/* User Name */}
-          {user?.data?.name && (
+          {
             <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex">
               <div className="flex flex-col items-start justify-start gap-2">
                 <CardTitle className="text-base font-bold">Name:</CardTitle>
@@ -157,9 +177,9 @@ const User = () => {
                 updateInfo={updateinfo}
               />
             </Card>
-          )}
+          }
           {/* User Email */}
-          {user?.data?.email && (
+          {
             <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex">
               <div className="flex flex-col items-start justify-start gap-2">
                 <CardTitle className="text-base font-bold">Email:</CardTitle>
@@ -174,9 +194,9 @@ const User = () => {
                 updateInfo={updateinfo}
               />
             </Card>
-          )}
+          }
           {/* User Phone */}
-          {user?.data?.phone && (
+          {
             <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex">
               <div className="flex flex-col items-start justify-start gap-2">
                 <CardTitle className="text-base font-bold">Phone:</CardTitle>
@@ -191,202 +211,196 @@ const User = () => {
                 updateInfo={updateinfo}
               />
             </Card>
-          )}
+          }
 
           {/* Domain name */}
 
-          {user?.data?.domains &&
-            user?.data?.domains.map((domain) => (
-              <Card
-                key={domain.id}
-                className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
-              >
-                <div className="flex flex-col items-start justify-center gap-2">
-                  <CardTitle className="text-base font-bold">domain:</CardTitle>
-                  <span className="text-gray-700 font-semibold">
-                    <a
-                      target="_blank"
-                      href={domain?.name}
-                      className="text-blue-600 font-semibold hover:underline"
-                    >
-                      name : {domain?.name}
-                    </a>
-                    <p>price : ₹ {domain?.price}</p>
-                  </span>
-                </div>
+          {user?.data?.domains?.map((domain) => (
+            <Card
+              key={domain.id}
+              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
+            >
+              <div className="flex flex-col items-start justify-center gap-2">
+                <CardTitle className="text-base font-bold">domain:</CardTitle>
+                <span className="text-gray-700 font-semibold">
+                  <a
+                    target="_blank"
+                    href={domain?.name}
+                    className="text-blue-600 font-semibold hover:underline"
+                  >
+                    name : {domain?.name}
+                  </a>
+                  <p>price : ₹ {domain?.price}</p>
+                </span>
+              </div>
 
-                <div className="flex flex-col gap-2">
-                  <EditBox
-                    name={"Domain"}
-                    value={domain?.name}
-                    onChange={(e) =>
-                      setValue({ ...value, domain: e.target.value })
-                    }
-                    updateInfo={updateDomain}
-                  />
-                  <EditBox
-                    name={"Domain Price"}
-                    value={domain?.price}
-                    onChange={(e) =>
-                      setValue({ ...value, domainPrice: e.target.value })
-                    }
-                    updateInfo={updateDomain}
-                  />
-                </div>
-              </Card>
-            ))}
+              <div className="flex flex-col gap-2">
+                <EditBox
+                  name={"Domain"}
+                  value={domain?.name}
+                  onChange={(e) =>
+                    setValue({ ...value, domain: e.target.value })
+                  }
+                  updateInfo={updateDomain}
+                />
+                <EditBox
+                  name={"Domain Price"}
+                  value={domain?.price}
+                  onChange={(e) =>
+                    setValue({ ...value, domainPrice: e.target.value })
+                  }
+                  updateInfo={updateDomain}
+                />
+              </div>
+            </Card>
+          ))}
 
           {/* Hosting  join & renew*/}
 
-          {user?.data?.hosting &&
-            user?.data?.hosting.map((host) => (
-              <Card
-                key={host.id}
-                className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
-              >
+          {user?.data?.hosting?.map((host) => (
+            <Card
+              key={host.id}
+              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
+            >
+              <div className="flex flex-col items-start justify-start gap-2">
+                <CardTitle className="text-base font-bold">Hosting:</CardTitle>
+                <span className="space-y-1 text-gray-700 font-semibold">
+                  Join Date: {formatDate(new Date(host?.purchasedAt))}
+                  <br />
+                  Renew Date: {formatRenewalDate(new Date(host?.purchasedAt))}
+                  <p>price : ₹ {host?.price}</p>
+                </span>
+              </div>
+              <div className="flex flex-col gap-2">
+                <EditBox
+                  name={"Hosting Date"}
+                  value={host?.purchasedAt}
+                  onChange={(e) =>
+                    setValue({ ...value, hostingDate: e.target.value })
+                  }
+                  updateInfo={updateHosting}
+                />
+                <EditBox
+                  name={"Hosting Price"}
+                  value={host?.price}
+                  onChange={(e) =>
+                    setValue({ ...value, hostingPrice: e.target.value })
+                  }
+                  updateInfo={updateHosting}
+                />
+              </div>
+            </Card>
+          ))}
+          {/* cPanel */}
+          {user?.data?.cpanel?.map((cpanel) => (
+            <Card
+              key={cpanel?.id}
+              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
+            >
+              <div className="flex items-start justify-between w-full">
                 <div className="flex flex-col items-start justify-start gap-2">
                   <CardTitle className="text-base font-bold">
-                    Hosting:
+                    Cpanel URL:
                   </CardTitle>
-                  <span className="space-y-1 text-gray-700 font-semibold">
-                    Join Date: {formatDate(new Date(host?.purchasedAt))}
-                    <br />
-                    Renew Date: {formatRenewalDate(new Date(host?.purchasedAt))}
-                    <p>price : ₹ {host?.price}</p>
+                  <span className="text-gray-700 font-semibold">
+                    <a
+                      target="_blank"
+                      href={cpanel?.cpanelId}
+                      className="text-blue-600 font-semibold hover:underline"
+                    >
+                      {cpanel?.cpanelId}
+                    </a>
                   </span>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <EditBox
-                    name={"Hosting Date"}
-                    value={host?.purchasedAt}
-                    onChange={(e) =>
-                      setValue({ ...value, hostingDate: e.target.value })
-                    }
-                    updateInfo={updateHosting}
-                  />
-                  <EditBox
-                    name={"Hosting Price"}
-                    value={host?.price}
-                    onChange={(e) =>
-                      setValue({ ...value, hostingPrice: e.target.value })
-                    }
-                    updateInfo={updateHosting}
-                  />
-                </div>
-              </Card>
-            ))}
-          {/* cPanel */}
-          {user?.data?.cpanel &&
-            user?.data?.cpanel?.map((cpanel) => (
-              <Card
-                key={cpanel?.id}
-                className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
-              >
-                <div className="flex items-start justify-between w-full">
-                  <div className="flex flex-col items-start justify-start gap-2">
-                    <CardTitle className="text-base font-bold">
-                      Cpanel URL:
-                    </CardTitle>
-                    <span className="text-gray-700 font-semibold">
-                      <a
-                        target="_blank"
-                        href={cpanel?.cpanelId}
-                        className="text-blue-600 font-semibold hover:underline"
-                      >
-                        {cpanel?.cpanelId}
-                      </a>
-                    </span>
-                  </div>
-                  <EditBox
-                    name={"Cpanel"}
-                    value={cpanel?.cpanelId}
-                    onChange={(e) =>
-                      setValue({ ...value, cpanel: e.target.value })
-                    }
-                    updateInfo={updateinfo}
-                  />
-                </div>
-              </Card>
-            ))}
+                <EditBox
+                  name={"Cpanel"}
+                  value={cpanel?.cpanelId}
+                  onChange={(e) =>
+                    setValue({ ...value, cpanel: e.target.value })
+                  }
+                  updateInfo={updateinfo}
+                />
+              </div>
+            </Card>
+          ))}
           {/* Dashboard  login URL*/}
 
-          {user?.data?.dashboard &&
-            user?.data?.dashboard?.map((dash) => (
-              <Card
-                key={dash.id}
-                className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
-              >
-                <div className="w-full flex flex-col items-start justify-start gap-2">
-                  <CardTitle className="text-base font-bold">
-                    Dashboard URL:
-                  </CardTitle>
-                  <div className="w-full flex justify-between items-center">
-                    <span className="text-gray-700 font-semibold">
-                      <a
-                        target="_blank"
-                        href={dash?.loginUrl}
-                        className="text-blue-600 font-semibold hover:underline"
-                      >
-                        URL: {dash?.loginUrl}
-                      </a>
+          {user?.data?.dashboard?.map((dash) => (
+            <Card
+              key={dash.id}
+              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
+            >
+              <div className="w-full flex flex-col items-start justify-start gap-2">
+                <CardTitle className="text-base font-bold">
+                  Dashboard URL:
+                </CardTitle>
+                <div className="w-full flex justify-between items-center">
+                  <span className="text-gray-700 font-semibold">
+                    <a
+                      target="_blank"
+                      href={dash?.loginUrl}
+                      className="text-blue-600 font-semibold hover:underline"
+                    >
+                      URL: {dash?.loginUrl}
+                    </a>
+                  </span>
+                  <EditBox
+                    name={"URL"}
+                    value={dash?.loginUrl}
+                    onChange={(e) =>
+                      setValue({ ...value, dashboardUrl: e.target.value })
+                    }
+                    updateInfo={updateDashboard}
+                  />
+                </div>
+                <div className="w-full flex justify-between items-center">
+                  <span className="text-gray-700 font-semibold">
+                    <span>ID: {dash?.dashboardId}</span>
+                  </span>
+                  <EditBox
+                    name={"ID"}
+                    value={dash?.dashboardId}
+                    onChange={(e) =>
+                      setValue({ ...value, dashboardId: e.target.value })
+                    }
+                    updateInfo={updateDashboard}
+                  />
+                </div>
+                <div className="w-full flex justify-between items-center">
+                  <span className="text-gray-700 font-semibold">
+                    <span>
+                      Password: {showPassword ? dash?.password : "••••••••"}
                     </span>
-                    <EditBox
-                      name={"URL"}
-                      value={dash?.loginUrl}
-                      onChange={(e) =>
-                        setValue({ ...value, dashboardUrl: e.target.value })
-                      }
-                      updateInfo={updateinfo}
-                    />
-                  </div>
-                  <div className="w-full flex justify-between items-center">
-                    <span className="text-gray-700 font-semibold">
-                      <span>ID: {dash?.dashboardId}</span>
-                    </span>
-                    <EditBox
-                      name={"ID"}
-                      value={dash?.dashboardId}
-                      onChange={(e) =>
-                        setValue({ ...value, dashboardId: e.target.value })
-                      }
-                      updateInfo={updateinfo}
-                    />
-                  </div>
-                  <div className="w-full flex justify-between items-center">
-                    <span className="text-gray-700 font-semibold">
-                      <span>
-                        Password: {showPassword ? dash?.password : "••••••••"}
-                      </span>
-                    </span>
+                  </span>
 
-                    <div className="flex items-center justify-center gap-2">
-                      {showPassword ? (
-                        <EyeOff
-                          className="p-1 w-7 h-7"
-                          onClick={() => setShowPassword(!showPassword)}
-                        />
-                      ) : (
-                        <Eye
-                          className="p-1 w-7 h-7"
-                          onClick={() => setShowPassword(!showPassword)}
-                        />
-                      )}
-                      <EditBox
-                        name={"Password"}
-                        value={dash?.password}
-                        onChange={(e) =>
-                          setValue({
-                            ...value,
-                            dashboardPassword: e.target.value,
-                          })
-                        }
-                        updateInfo={updateinfo}
+                  <div className="flex items-center justify-center gap-2">
+                    {showPassword ? (
+                      <EyeOff
+                        className="p-1 w-7 h-7"
+                        onClick={() => setShowPassword(!showPassword)}
                       />
-                    </div>
+                    ) : (
+                      <Eye
+                        className="p-1 w-7 h-7"
+                        onClick={() => setShowPassword(!showPassword)}
+                      />
+                    )}
+                    <EditBox
+                      name={"Password"}
+                      value={dash?.password}
+                      onChange={(e) =>
+                        setValue({
+                          ...value,
+                          dashboardPassword: e.target.value,
+                        })
+                      }
+                      updateInfo={updateDashboard}
+                    />
                   </div>
                 </div>
-              </Card>
-            ))}
+              </div>
+            </Card>
+          ))}
         </div>
       )}
     </div>
