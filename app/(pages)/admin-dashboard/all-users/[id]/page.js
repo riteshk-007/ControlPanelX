@@ -3,7 +3,11 @@ import EditBox from "@/app/components/EditBox";
 import SkeletonCard from "@/app/components/Skeleton";
 import { Card, CardTitle } from "@/components/ui/card";
 import { getUser } from "@/helper/AnyUser";
-import { updateBasicInfo, updateDomainInfo } from "@/helper/UpdateSlice";
+import {
+  updateBasicInfo,
+  updateDomainInfo,
+  updateHostingInfo,
+} from "@/helper/UpdateSlice";
 import { Eye, EyeOff } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -93,6 +97,32 @@ const User = () => {
             value && Array.isArray(value.domainPrice)
               ? parseInt(value.domainPrice.join(""))
               : parseInt(value.domainPrice),
+        },
+      })
+    );
+  };
+  // update hosting info
+  useEffect(() => {
+    setValue({
+      hostingDate: user?.data?.hosting?.map((host) => host?.purchasedAt),
+      hostingPrice: user?.data?.hosting?.map((host) => host?.price),
+    });
+  }, [user?.data?.hosting, user?.data?.hosting?.price]);
+
+  const updateHosting = () => {
+    dispatch(
+      updateHostingInfo({
+        userId: user?.data?.id,
+        hostingId: user?.data?.hosting?.map((host) => host?.id).join(", "),
+        updateData: {
+          purchasedAt:
+            value && Array.isArray(value.hostingDate)
+              ? value.hostingDate.join("")
+              : value.hostingDate,
+          price:
+            value && Array.isArray(value.hostingPrice)
+              ? parseInt(value.hostingPrice.join(""))
+              : parseInt(value.hostingPrice),
         },
       })
     );
@@ -232,7 +262,7 @@ const User = () => {
                     onChange={(e) =>
                       setValue({ ...value, hostingDate: e.target.value })
                     }
-                    updateInfo={updateinfo}
+                    updateInfo={updateHosting}
                   />
                   <EditBox
                     name={"Hosting Price"}
@@ -240,7 +270,7 @@ const User = () => {
                     onChange={(e) =>
                       setValue({ ...value, hostingPrice: e.target.value })
                     }
-                    updateInfo={updateinfo}
+                    updateInfo={updateHosting}
                   />
                 </div>
               </Card>

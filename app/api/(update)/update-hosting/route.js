@@ -36,14 +36,13 @@ export const PATCH = async (req) => {
       });
     }
 
-    const updatedHosting = await prisma.hosting.update({
+    await prisma.hosting.update({
       where: { id: hostingId },
       data: updateData,
     });
 
     return NextResponse.json({
       status: 200,
-      body: updatedHosting,
       message: "Hosting updated successfully",
     });
   } catch (error) {

@@ -57,6 +57,36 @@ export const updateDomainInfo = createAsyncThunk(
     }
   }
 );
+// udpate User Hosting information
+export const updateHostingInfo = createAsyncThunk(
+  "update/updateHostingInfo",
+  async (data, thunkAPI) => {
+    try {
+      const hosting = await fetch("/api/update-hosting", {
+        method: "PATCH",
+        cache: "no-cache",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: data?.userId,
+          hostingId: data?.hostingId,
+          updateData: data?.updateData,
+        }),
+      });
+      const response = await hosting.json();
+      if (response.status === 200) {
+        toast.success("Hosting updated successfully!");
+        return response.body;
+      } else {
+        toast.error(response.message);
+        return thunkAPI.rejectWithValue({ error: response.message });
+      }
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
 export const updateSlice = createSlice({
   name: "update",
   initialState: {
@@ -87,6 +117,18 @@ export const updateSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(updateDomainInfo.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(updateHostingInfo.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateHostingInfo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(updateHostingInfo.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
