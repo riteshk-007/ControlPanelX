@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 
 // Creating a new user
 export const CreateUser = createAsyncThunk(
@@ -24,7 +25,13 @@ export const CreateUser = createAsyncThunk(
         }),
       });
       const response = await user.json();
-      return response;
+      if (response.status === 200) {
+        toast.success("User created successfully!");
+        return response.body;
+      } else {
+        toast.error(response.message);
+        return thunkAPI.rejectWithValue({ error: response.message });
+      }
     } catch (error) {
       return thunkAPI.rejectWithValue({ error: error.message });
     }
