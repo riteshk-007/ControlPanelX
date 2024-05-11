@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import Head from "next/head";
+import toast from "react-hot-toast";
 
 const Checkout = ({ data }) => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
@@ -45,12 +45,14 @@ const Checkout = ({ data }) => {
 
           if (res.ok) {
             console.log("User created successfully");
+            toast.success("Payment Successful");
+            const date = data?.hostDate.toString();
+            console.log(date);
           } else {
             console.log("Something went wrong");
+            toast.error("Payment Failed");
           }
-
           alert("Payment Successful");
-          window.location.reload();
         },
         theme: {
           color: "#000000",

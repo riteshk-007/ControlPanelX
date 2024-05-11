@@ -29,6 +29,7 @@ const UserAmt = ({ session }) => {
   );
   const totalAmount = domainTotal + hostingTotal;
 
+  const HostingDate = amount?.hosting?.map((host) => host?.purchasedAt);
   return (
     <>
       <Card className="sm:col-span-2 w-full sm:min-w-96 text-gray-900 border-gray-400 shadow-md mt-5 md:w-1/2 lg:w-1/3">
@@ -55,7 +56,13 @@ const UserAmt = ({ session }) => {
       </Card>
       <div className="">
         {payment && (
-          <Checkout data={{ amount: totalAmount, id: session?.user?.id }} />
+          <Checkout
+            data={{
+              amount: totalAmount,
+              id: session?.user?.id,
+              hostDate: HostingDate,
+            }}
+          />
         )}
       </div>
     </>
