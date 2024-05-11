@@ -1,3 +1,4 @@
+export const revalidate = 10;
 import prisma from "@/DB/db.config";
 import { NextResponse } from "next/server";
 
