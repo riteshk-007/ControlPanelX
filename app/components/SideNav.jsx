@@ -1,8 +1,14 @@
 "use client";
 import Link from "next/link";
-import { Home, LogOut, User, UserRoundPlus, Users } from "lucide-react";
+import {
+  History,
+  Home,
+  LogOut,
+  User,
+  UserRoundPlus,
+  Users,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import {
@@ -26,6 +32,11 @@ const SideNav = () => {
       name: "Create User",
       icon: UserRoundPlus,
       link: "/admin-dashboard/create-user",
+    },
+    {
+      name: "Payment History",
+      icon: History,
+      link: "/admin-dashboard/payment-history",
     },
   ];
 
