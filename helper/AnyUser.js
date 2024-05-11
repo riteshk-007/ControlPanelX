@@ -6,7 +6,7 @@ export const getAllUsers = createAsyncThunk(
   async (thunkAPI) => {
     try {
       const users = await fetch("/api/all-users", {
-        cache: "no-cache",
+        next: { revalidate: 10 },
       });
       const data = await users.json();
       return data;
@@ -21,7 +21,7 @@ export const getUser = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const user = await fetch(`/api/all-users/${id}`, {
-        cache: "no-cache",
+        next: { revalidate: 5 },
       });
       const data = await user.json();
       return data;
