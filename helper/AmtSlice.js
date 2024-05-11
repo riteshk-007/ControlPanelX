@@ -25,7 +25,7 @@ export const getAllUsersPaymentHistory = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const users = await fetch("/api/payment", {
-        next: { revalidate: 10 },
+        next: { revalidate: 5000 },
       });
       const data = await users.json();
       return data;

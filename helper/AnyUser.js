@@ -6,7 +6,7 @@ export const getAllUsers = createAsyncThunk(
   async (thunkAPI) => {
     try {
       const users = await fetch("/api/all-users", {
-        next: { revalidate: 10 },
+        next: { revalidate: 5000 },
       });
       const data = await users.json();
       return data;
@@ -21,7 +21,7 @@ export const getUser = createAsyncThunk(
   async (id, thunkAPI) => {
     try {
       const user = await fetch(`/api/all-users/${id}`, {
-        next: { revalidate: 5 },
+        next: { revalidate: 5000 },
       });
       const data = await user.json();
       return data;
