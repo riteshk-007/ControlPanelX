@@ -19,12 +19,26 @@ export const getUserTotalAmount = createAsyncThunk(
     }
   }
 );
+// get all users payment history
+export const getAllUsersPaymentHistory = createAsyncThunk(
+  "user/getAllUsersPaymentHistory",
+  async (_, thunkAPI) => {
+    try {
+      const users = await fetch("/api/payment");
+      const data = await users.json();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
 export const AmtSlice = createSlice({
   name: "amt",
   initialState: {
     amount: [],
     loading: false,
     error: null,
+    users: [],
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -34,9 +48,21 @@ export const AmtSlice = createSlice({
       })
       .addCase(getUserTotalAmount.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.amount = action.payload;
       })
       .addCase(getUserTotalAmount.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+    builder
+      .addCase(getAllUsersPaymentHistory.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllUsersPaymentHistory.fulfilled, (state, action) => {
+        state.loading = false;
+        state.users = action.payload;
+      })
+      .addCase(getAllUsersPaymentHistory.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
