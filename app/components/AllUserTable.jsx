@@ -1,5 +1,6 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllUsers } from "@/helper/AnyUser";
 import { MoveLeft, MoveRight } from "lucide-react";
@@ -10,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const AllUserTable = () => {
   const dispatch = useDispatch();
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     dispatch(getAllUsers());
@@ -41,7 +43,7 @@ const AllUserTable = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
   // Get the data for the current page
-  const currentPageData = user?.data?.slice(indexOfFirstItem, indexOfLastItem);
+  var currentPageData = user?.data?.slice(indexOfFirstItem, indexOfLastItem);
 
   // Function to handle page change
   const handlePageChange = (pageNumber) => {
@@ -72,8 +74,35 @@ const AllUserTable = () => {
 
     return pageNumbers;
   };
+  // Update the search input
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+  };
+  // Filter the user data based on the search input
+  const filteredUsers = user?.data?.filter((user) => {
+    return (
+      user.name.toUpperCase().includes(search.toUpperCase()) ||
+      user.email.toUpperCase().includes(search.toUpperCase())
+    );
+  });
+  // Use the filtered data for the current page
+  var currentPageData = filteredUsers?.slice(indexOfFirstItem, indexOfLastItem);
   return (
     <div className="overflow-x-auto w-full mt-5 rounded-md shadow-2xl">
+      <label
+        htmlFor="search"
+        className="md:flex items-center justify-center w-full md:w-1/2 my-3 md:mx-1"
+      >
+        <span className="mr-2">Search:</span>
+        <Input
+          type="text"
+          id="myInput"
+          placeholder="Search for names, emails..."
+          value={search}
+          onChange={handleSearchChange}
+          className="md:my-0 my-2"
+        />
+      </label>
       <table className="rounded-md text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full">
         <thead className="text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400">
           <tr>
