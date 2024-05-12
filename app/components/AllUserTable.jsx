@@ -43,7 +43,9 @@ const AllUserTable = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
   // Get the data for the current page
-  var currentPageData = user?.data?.slice(indexOfFirstItem, indexOfLastItem);
+  var currentPageData = Array.isArray(user?.data)
+    ? user?.data?.slice(indexOfFirstItem, indexOfLastItem)
+    : [];
 
   // Function to handle page change
   const handlePageChange = (pageNumber) => {
@@ -79,12 +81,14 @@ const AllUserTable = () => {
     setSearch(event.target.value);
   };
   // Filter the user data based on the search input
-  const filteredUsers = user?.data?.filter((user) => {
-    return (
-      user.name.toUpperCase().includes(search.toUpperCase()) ||
-      user.email.toUpperCase().includes(search.toUpperCase())
-    );
-  });
+  const filteredUsers = Array.isArray(user?.data)
+    ? user?.data?.filter((user) => {
+        return (
+          user.name.toUpperCase().includes(search.toUpperCase()) ||
+          user.email.toUpperCase().includes(search.toUpperCase())
+        );
+      })
+    : [];
   // Use the filtered data for the current page
   var currentPageData = filteredUsers?.slice(indexOfFirstItem, indexOfLastItem);
   return (
