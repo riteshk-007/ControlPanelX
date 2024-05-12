@@ -2,9 +2,10 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { getAllUsers } from "@/helper/AnyUser";
+import { MoveLeft, MoveRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const AllUserTable = () => {
@@ -31,6 +32,46 @@ const AllUserTable = () => {
     return renewalDate.toLocaleDateString("en-US", options);
   }
 
+  // pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Number of items to display per page
+
+  // Calculate the start and end indexes for the current page
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  // Get the data for the current page
+  const currentPageData = user?.data?.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Function to handle page change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Render pagination numbers
+  const renderPageNumbers = () => {
+    const pageNumbers = [];
+
+    for (
+      let i = 1;
+      i <= Math.ceil((user?.data?.length || 0) / itemsPerPage);
+      i++
+    ) {
+      pageNumbers.push(
+        <button
+          key={i}
+          className={`px-3 py-1 mx-1 rounded select-none ${
+            currentPage === i ? "bg-black text-white" : "bg-gray-200"
+          }`}
+          onClick={() => handlePageChange(i)}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    return pageNumbers;
+  };
   return (
     <div className="overflow-x-auto w-full mt-5 rounded-md shadow-2xl">
       <table className="rounded-md text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 w-full">
@@ -82,7 +123,7 @@ const AllUserTable = () => {
             </tr>
           ) : (
             Array.isArray(user?.data) &&
-            user?.data.map((user, index) => (
+            currentPageData?.map((user, index) => (
               <tr
                 key={user?.id}
                 className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -179,6 +220,27 @@ const AllUserTable = () => {
           )}
         </tbody>
       </table>
+      {/* Render pagination */}
+      <div className="flex justify-center mt-4 select-none">
+        {currentPage !== 1 && (
+          <button
+            className="px-3 py-1 mx-1 rounded bg-gray-900 text-white hover:bg-gray-800"
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            <MoveLeft />
+          </button>
+        )}
+        {renderPageNumbers()}
+        {currentPage !==
+          Math.ceil((user?.data?.length || 0) / itemsPerPage) && (
+          <button
+            className="px-3 py-1 mx-1 rounded bg-gray-900 text-white hover:bg-gray-800"
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            <MoveRight />
+          </button>
+        )}
+      </div>
     </div>
   );
 };
