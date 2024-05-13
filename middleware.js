@@ -26,7 +26,16 @@ export async function middleware(req) {
 
   // Redirect authenticated users from login and landing routes
   if (session) {
-    if (["/login-user", "/admin-login", "/"].includes(pathname)) {
+    if (
+      [
+        "/login-user",
+        "/admin-login",
+        "/",
+        "/contact",
+        "/about",
+        "/price",
+      ].includes(pathname)
+    ) {
       const user = session.user;
       const redirectUrl = user.isAdmin ? "/admin-dashboard" : "/dashboard";
       return NextResponse.redirect(new URL(redirectUrl, req.url));
@@ -69,5 +78,8 @@ export const config = {
     "/login-user",
     "/admin-login",
     "/",
+    "/contact",
+    "/about",
+    "/price",
   ],
 };
