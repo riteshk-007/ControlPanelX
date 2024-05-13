@@ -92,7 +92,7 @@ const Navbar = () => {
                   <Link
                     className="text-white md:text-gray-800 transition-all  hover:text-gray-800/75"
                     onClick={() => setShow(false)}
-                    href="/"
+                    href="/contact"
                   >
                     Contact
                   </Link>
