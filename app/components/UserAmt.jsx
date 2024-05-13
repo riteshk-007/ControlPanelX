@@ -18,18 +18,30 @@ const UserAmt = ({ session }) => {
   }, [dispatch, session?.user?.id]);
 
   // get user total amount
-  const amount = useSelector((state) => state?.amount?.user?.data);
-  const domainTotal = amount?.domains?.reduce(
-    (total, domain) => total + domain?.price,
-    0
-  );
-  const hostingTotal = amount?.hosting?.reduce(
-    (total, hosting) => total + hosting?.price,
-    0
-  );
-  const totalAmount = domainTotal + hostingTotal;
+  const amount = useSelector((state) => state?.amount?.amount);
 
-  const HostingDate = amount?.hosting?.map((host) => host?.purchasedAt);
+  // Extract domain prices
+  const domainPrices =
+    amount?.data?.domains?.map((domain) => domain.price) || [];
+  const totalDomainPrice = domainPrices.reduce(
+    (total, price) => total + price,
+    0
+  );
+
+  // Extract hosting prices
+  const hostingPrices =
+    amount?.data?.hosting?.map((hosting) => hosting.price) || [];
+  const totalHostingPrice = hostingPrices.reduce(
+    (total, price) => total + price,
+    0
+  );
+  // Add domain and hosting prices
+  const totalAmount = totalDomainPrice + totalHostingPrice;
+
+  //  get hosting dates
+  const hostingDates =
+    amount?.data?.hosting?.map((hosting) => hosting.purchasedAt) || [];
+
   return (
     <>
       <Card className="sm:col-span-2 w-full sm:min-w-96 text-gray-900 border-gray-400 shadow-md mt-5 md:w-1/2 lg:w-1/3">
@@ -60,7 +72,7 @@ const UserAmt = ({ session }) => {
             data={{
               amount: totalAmount,
               id: session?.user?.id,
-              hostDate: HostingDate,
+              hostDate: hostingDates,
             }}
           />
         )}
