@@ -56,10 +56,12 @@ const UserAmt = ({ session }) => {
         <CardFooter>
           <Button
             onClick={() => {
-              setPayment(true);
-              setTimeout(() => {
-                setPayment(false);
-              }, 500);
+              if (totalAmount > 0) {
+                setPayment(true);
+                setTimeout(() => {
+                  setPayment(false);
+                }, 500);
+              }
             }}
           >
             Pay Now
