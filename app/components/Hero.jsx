@@ -6,7 +6,6 @@ import Navbar from "./Navbar";
 const HeroSection = () => {
   return (
     <>
-      <Navbar />
       <div className="py-12 md:py-20 px-4 md:px-8">
         <div className="w-full md:p-5 mx-auto flex flex-col md:flex-row items-center justify-between">
           <div className="md:w-1/2 mb-8 md:mb-0">
