@@ -57,20 +57,22 @@ const PaymentHistory = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {users.map((user) => (
-                  <tr key={user.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">{user.id}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {user.userId}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {user.amount}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {new Date(user.paidAt).toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
+                {users
+                  ?.map((user) => (
+                    <tr key={user.id}>
+                      <td className="px-6 py-4 whitespace-nowrap">{user.id}</td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {user.userId}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {user.amount}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {new Date(user.paidAt).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))
+                  .reverse()}
               </tbody>
             </table>
           </div>

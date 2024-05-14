@@ -2,7 +2,6 @@
 import { CreateUser } from "@/helper/CreateUserSlice";
 import { useForm, useWatch } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import bcrypt from "bcryptjs";
 
 const CreateUserform = () => {
   const {
@@ -17,7 +16,7 @@ const CreateUserform = () => {
     name: ["domains", "hosting", "dashboard", "cpanel"],
   });
   const dispatch = useDispatch();
-  const onSubmit = async (data) => {
+  const onSubmit = (data) => {
     if (data.domains) {
       data.domains = data.domains.filter(
         (domain) => domain.price.trim() !== ""
@@ -38,14 +37,6 @@ const CreateUserform = () => {
       data.cpanel = data.cpanel.filter(
         (cpanel) => cpanel.cpanelId.trim() !== ""
       );
-    }
-    if (data.dashboard) {
-      for (let dashboard of data.dashboard) {
-        if (dashboard.password) {
-          const salt = await bcrypt.genSalt(10);
-          dashboard.password = await bcrypt.hash(dashboard.password, salt);
-        }
-      }
     }
     dispatch(CreateUser(data));
   };
