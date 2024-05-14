@@ -58,8 +58,9 @@ const NearestDate = () => {
     for (const user of users) {
       for (const hosting of user.hosting) {
         const purchasedAt = new Date(hosting.purchasedAt);
+        const renewAt = new Date(hosting.renewAt);
         const diffInDays = Math.floor(
-          (today - purchasedAt) / (1000 * 60 * 60 * 24)
+          (renewAt.getTime() - purchasedAt.getTime()) / (1000 * 60 * 60 * 24)
         );
         hostingRenewalDates.push({ ...hosting, diffInDays, user });
       }
