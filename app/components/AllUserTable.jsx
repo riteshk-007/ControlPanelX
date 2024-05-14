@@ -218,7 +218,7 @@ const AllUserTable = () => {
                         <span className="text-[#4169E1]">
                           {" "}
                           <p className="hidden lg:block">Renew Date: </p>
-                          {formatRenewalDate(new Date(hosting?.purchasedAt))}
+                          {formatDate(new Date(hosting?.renewAt))}
                         </span>
                       </span>
                     ))
