@@ -60,6 +60,10 @@ const Checkout = ({ data }) => {
             date.setFullYear(date.getFullYear() + 1);
             // Convert the Date object back to a string
             const updatedDate = date.toISOString().split("T")[0];
+            // Add one more year to the date for renewAt
+            date.setFullYear(date.getFullYear() + 1);
+            // Convert the Date object back to a string
+            const renewAtDate = date.toISOString().split("T")[0];
 
             // Dispatch the updateHostingInfo action with the updated data
             dispatch(
@@ -68,6 +72,7 @@ const Checkout = ({ data }) => {
                 hostingId: hostId,
                 updateData: {
                   purchasedAt: updatedDate,
+                  renewAt: renewAtDate,
                 },
               })
             );
