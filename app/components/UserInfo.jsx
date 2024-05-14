@@ -43,16 +43,6 @@ const UserInfo = ({ session }) => {
     return date.toLocaleDateString("en-US", options);
   }
 
-  function formatRenewalDate(date) {
-    const renewalDate = new Date(
-      date.getFullYear() + 1,
-      date.getMonth(),
-      date.getDate()
-    );
-    const options = { month: "long", day: "numeric", year: "numeric" };
-    return renewalDate.toLocaleDateString("en-US", options);
-  }
-
   if (loading) {
     return (
       <div className="w-full grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 p-2 gap-4 mt-5">
@@ -73,68 +63,65 @@ const UserInfo = ({ session }) => {
       <div className="w-full grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 p-2 gap-3 mt-3">
         {/* User Name */}
         {user?.data?.name && (
-          <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex">
-            <div className="flex flex-col items-start justify-start gap-2">
+          <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex h-min">
+            <div className="flex flex-col items-start justify-start gap-2 w-full">
               <CardTitle className="text-base font-bold">Name:</CardTitle>
-              <CardDescription className="text-gray-700 font-semibold">
+              <CardDescription className="text-gray-700 font-semibold w-full flex items-center justify-between">
                 {user?.data?.name}
+                <Button
+                  onClick={() => copyToClipboard(user?.data?.name)}
+                  className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
+                >
+                  {copiedText === user?.data?.name ? (
+                    <Check className="text-sm" />
+                  ) : (
+                    <Copy />
+                  )}
+                </Button>
               </CardDescription>
             </div>
-
-            <Button
-              onClick={() => copyToClipboard(user?.data?.name)}
-              className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
-            >
-              {copiedText === user?.data?.name ? (
-                <Check className="text-sm" />
-              ) : (
-                <Copy />
-              )}
-            </Button>
           </Card>
         )}
         {/* User Email */}
         {user?.data?.email && (
-          <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex">
-            <div className="flex flex-col items-start justify-start gap-2">
+          <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex h-min">
+            <div className="flex flex-col items-start justify-start gap-2 w-full">
               <CardTitle className="text-base font-bold">Email:</CardTitle>
-              <CardDescription className="text-gray-700 font-semibold">
+              <CardDescription className="text-gray-700 font-semibold w-full flex items-center justify-between">
                 {user?.data?.email}
+                <Button
+                  onClick={() => copyToClipboard(user?.data?.email)}
+                  className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
+                >
+                  {copiedText === user?.data?.email ? (
+                    <Check className="text-sm" />
+                  ) : (
+                    <Copy />
+                  )}
+                </Button>
               </CardDescription>
             </div>
-
-            <Button
-              onClick={() => copyToClipboard(user?.data?.email)}
-              className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
-            >
-              {copiedText === user?.data?.email ? (
-                <Check className="text-sm" />
-              ) : (
-                <Copy />
-              )}
-            </Button>
           </Card>
         )}
         {/* User Phone */}
         {user?.data?.phone && (
-          <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex">
-            <div className="flex flex-col items-start justify-start gap-2">
+          <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex h-min">
+            <div className="flex flex-col items-start justify-start gap-2 w-full">
               <CardTitle className="text-base font-bold">Phone:</CardTitle>
-              <CardDescription className="text-gray-700 font-semibold">
+              <CardDescription className="text-gray-700 font-semibold w-full flex items-center justify-between">
                 {user?.data?.phone}
+                <Button
+                  onClick={() => copyToClipboard(user?.data?.phone)}
+                  className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
+                >
+                  {copiedText === user?.data?.phone ? (
+                    <Check className="text-sm" />
+                  ) : (
+                    <Copy />
+                  )}
+                </Button>
               </CardDescription>
             </div>
-
-            <Button
-              onClick={() => copyToClipboard(user?.data?.phone)}
-              className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
-            >
-              {copiedText === user?.data?.phone ? (
-                <Check className="text-sm" />
-              ) : (
-                <Copy />
-              )}
-            </Button>
           </Card>
         )}
         {/* Domain name */}
@@ -143,11 +130,11 @@ const UserInfo = ({ session }) => {
           user?.data?.domains.map((domain) => (
             <Card
               key={domain.id}
-              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
+              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex h-min"
             >
-              <div className="flex flex-col items-start justify-start gap-2">
+              <div className="flex flex-col items-start justify-start gap-2 w-full">
                 <CardTitle className="text-base font-bold">domain:</CardTitle>
-                <CardDescription className="text-gray-700 font-semibold">
+                <CardDescription className="text-gray-700 font-semibold w-full flex items-center justify-between">
                   <a
                     target="_blank"
                     href={domain?.name}
@@ -155,20 +142,17 @@ const UserInfo = ({ session }) => {
                   >
                     name : {domain?.name}
                   </a>
+                  <Button
+                    onClick={() => copyToClipboard(domain?.name)}
+                    className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
+                  >
+                    {copiedText === domain?.name ? (
+                      <Check className="text-sm" />
+                    ) : (
+                      <Copy />
+                    )}
+                  </Button>
                 </CardDescription>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <Button
-                  onClick={() => copyToClipboard(domain?.name)}
-                  className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
-                >
-                  {copiedText === domain?.name ? (
-                    <Check className="text-sm" />
-                  ) : (
-                    <Copy />
-                  )}
-                </Button>
               </div>
             </Card>
           ))}
@@ -179,16 +163,16 @@ const UserInfo = ({ session }) => {
           user?.data?.hosting.map((host) => (
             <Card
               key={host.id}
-              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
+              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex h-min"
             >
-              <div className="flex flex-col items-start justify-start gap-2">
+              <div className="flex flex-col items-start justify-start gap-2 w-full">
                 <CardTitle className="text-base font-bold">Hosting:</CardTitle>
-                <CardDescription className="space-y-1 text-gray-700 font-semibold">
+                <CardDescription className="space-y-1 text-gray-700 font-semibold w-full flex items-center justify-between">
                   join Date: {formatDate(new Date(host?.createdAt))}
                   <br />
                   Purchased at : {formatDate(new Date(host?.purchasedAt))}
                   <br />
-                  Renew Date: {formatRenewalDate(new Date(host?.purchasedAt))}
+                  Renew Date: {formatDate(new Date(host?.renewAt))}
                 </CardDescription>
               </div>
             </Card>
@@ -198,14 +182,14 @@ const UserInfo = ({ session }) => {
           user?.data?.cpanel?.map((cpanel) => (
             <Card
               key={cpanel?.id}
-              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
+              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex h-min"
             >
               <div className="flex items-start justify-center">
-                <div className="flex flex-col items-start justify-start gap-2">
+                <div className="flex flex-col items-start justify-start gap-2 w-full">
                   <CardTitle className="text-base font-bold">
                     Cpanel URL:
                   </CardTitle>
-                  <CardDescription className="text-gray-700 font-semibold">
+                  <CardDescription className="text-gray-700 font-semibold w-full flex items-center justify-between">
                     <a
                       target="_blank"
                       href={cpanel?.cpanelId}
@@ -213,6 +197,16 @@ const UserInfo = ({ session }) => {
                     >
                       {cpanel?.cpanelId}
                     </a>
+                    <Button
+                      onClick={() => copyToClipboard(cpanel?.cpanelId)}
+                      className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
+                    >
+                      {copiedText === cpanel?.cpanelId ? (
+                        <Check className="text-sm" />
+                      ) : (
+                        <Copy />
+                      )}
+                    </Button>
                   </CardDescription>
 
                   <span className="text-sm  p-2">
@@ -220,17 +214,6 @@ const UserInfo = ({ session }) => {
                     admin.
                   </span>
                 </div>
-
-                <Button
-                  onClick={() => copyToClipboard(cpanel?.cpanelId)}
-                  className="p-2 w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-950"
-                >
-                  {copiedText === cpanel?.cpanelId ? (
-                    <Check className="text-sm" />
-                  ) : (
-                    <Copy />
-                  )}
-                </Button>
               </div>
             </Card>
           ))}
