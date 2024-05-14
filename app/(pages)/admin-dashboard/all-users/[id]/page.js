@@ -47,16 +47,6 @@ const User = () => {
     return date.toLocaleDateString("en-US", options);
   }
 
-  function formatRenewalDate(date) {
-    const renewalDate = new Date(
-      date.getFullYear() + 1,
-      date.getMonth(),
-      date.getDate()
-    );
-    const options = { month: "long", day: "numeric", year: "numeric" };
-    return renewalDate.toLocaleDateString("en-US", options);
-  }
-
   // update user basic info
   useEffect(() => {
     setValue({
@@ -66,6 +56,7 @@ const User = () => {
       domain: user?.data?.domains?.map((domain) => domain?.name),
       domainPrice: user?.data?.domains?.map((domain) => domain?.price),
       hostingDate: user?.data?.hosting?.map((host) => host?.purchasedAt),
+      hostingRenew: user?.data?.hosting?.map((host) => host?.renewAt),
       hostingPrice: user?.data?.hosting?.map((host) => host?.price),
       dashboardUrl: user?.data?.dashboard?.map((dash) => dash?.loginUrl),
       dashboardId: user?.data?.dashboard?.map((dash) => dash?.dashboardId),
@@ -116,6 +107,10 @@ const User = () => {
             value && Array.isArray(value.hostingDate)
               ? value.hostingDate.join("")
               : value.hostingDate,
+          renewAt:
+            value && Array.isArray(value.hostingRenew)
+              ? value.hostingRenew.join("")
+              : value.hostingRenew,
           price:
             value && Array.isArray(value.hostingPrice)
               ? parseInt(value.hostingPrice.join(""))
@@ -179,53 +174,59 @@ const User = () => {
         <div className="w-full grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 mt-4">
           {/* User Name */}
           {
-            <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex">
-              <div className="flex flex-col items-start justify-start gap-2">
+            <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex h-min">
+              <div className="flex flex-col items-start justify-start gap-2 w-full">
                 <CardTitle className="text-base font-bold">Name:</CardTitle>
-                <span className="text-gray-700 font-semibold">
+                <span className="text-gray-700 font-semibold w-full flex items-center justify-between">
                   {user?.data?.name}
+                  <EditBox
+                    name={"Name"}
+                    value={value?.name}
+                    onChange={(e) =>
+                      setValue({ ...value, name: e.target.value })
+                    }
+                    updateInfo={updateinfo}
+                  />
                 </span>
               </div>
-              <EditBox
-                name={"Name"}
-                value={value?.name}
-                onChange={(e) => setValue({ ...value, name: e.target.value })}
-                updateInfo={updateinfo}
-              />
             </Card>
           }
           {/* User Email */}
           {
-            <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex">
-              <div className="flex flex-col items-start justify-start gap-2">
+            <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex h-min">
+              <div className="flex flex-col items-start justify-start gap-2 w-full">
                 <CardTitle className="text-base font-bold">Email:</CardTitle>
-                <span className="text-gray-700 font-semibold">
+                <span className="text-gray-700 font-semibold w-full flex items-center justify-between">
                   {user?.data?.email}
+                  <EditBox
+                    name={"Email"}
+                    value={user?.data?.email}
+                    onChange={(e) =>
+                      setValue({ ...value, email: e.target.value })
+                    }
+                    updateInfo={updateinfo}
+                  />
                 </span>
               </div>
-              <EditBox
-                name={"Email"}
-                value={user?.data?.email}
-                onChange={(e) => setValue({ ...value, email: e.target.value })}
-                updateInfo={updateinfo}
-              />
             </Card>
           }
           {/* User Phone */}
           {
-            <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex">
-              <div className="flex flex-col items-start justify-start gap-2">
+            <Card className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex h-min">
+              <div className="flex flex-col items-start justify-start gap-2 w-full">
                 <CardTitle className="text-base font-bold">Phone:</CardTitle>
-                <span className="text-gray-700 font-semibold">
+                <span className="text-gray-700 font-semibold w-full flex items-center justify-between">
                   {user?.data?.phone}
+                  <EditBox
+                    name={"Phone"}
+                    value={user?.data?.phone}
+                    onChange={(e) =>
+                      setValue({ ...value, phone: e.target.value })
+                    }
+                    updateInfo={updateinfo}
+                  />
                 </span>
               </div>
-              <EditBox
-                name={"Phone"}
-                value={user?.data?.phone}
-                onChange={(e) => setValue({ ...value, phone: e.target.value })}
-                updateInfo={updateinfo}
-              />
             </Card>
           }
 
@@ -234,11 +235,11 @@ const User = () => {
           {user?.data?.domains?.map((domain) => (
             <Card
               key={domain.id}
-              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
+              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center h-min flex"
             >
-              <div className="flex flex-col items-start justify-center gap-2">
+              <div className="flex flex-col items-start justify-start h-full gap-2 w-full">
                 <CardTitle className="text-base font-bold">domain:</CardTitle>
-                <span className="text-gray-700 font-semibold">
+                <span className="text-gray-700 font-semibold w-full flex items-center justify-between">
                   <a
                     target="_blank"
                     href={domain?.name}
@@ -246,27 +247,26 @@ const User = () => {
                   >
                     name : {domain?.name}
                   </a>
-                  <p>price : ₹ {domain?.price}</p>
+                  <EditBox
+                    name={"Domain"}
+                    value={domain?.name}
+                    onChange={(e) =>
+                      setValue({ ...value, domain: e.target.value })
+                    }
+                    updateInfo={updateDomain}
+                  />
                 </span>
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <EditBox
-                  name={"Domain"}
-                  value={domain?.name}
-                  onChange={(e) =>
-                    setValue({ ...value, domain: e.target.value })
-                  }
-                  updateInfo={updateDomain}
-                />
-                <EditBox
-                  name={"Domain Price"}
-                  value={domain?.price}
-                  onChange={(e) =>
-                    setValue({ ...value, domainPrice: e.target.value })
-                  }
-                  updateInfo={updateDomain}
-                />
+                <span className="space-y-1 text-gray-700 font-semibold w-full flex items-center justify-between">
+                  Price: ₹ {domain?.price}
+                  <EditBox
+                    name={"Domain Price"}
+                    value={domain?.price}
+                    onChange={(e) =>
+                      setValue({ ...value, domainPrice: e.target.value })
+                    }
+                    updateInfo={updateDomain}
+                  />
+                </span>
               </div>
             </Card>
           ))}
@@ -276,69 +276,48 @@ const User = () => {
           {user?.data?.hosting?.map((host) => (
             <Card
               key={host.id}
-              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
+              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex h-min"
             >
-              <div className="flex flex-col items-start justify-start gap-2">
+              <div className="flex flex-col items-start justify-start gap-2 w-full">
                 <CardTitle className="text-base font-bold">Hosting:</CardTitle>
                 <span className="space-y-1 text-gray-700 font-semibold">
                   join Date: {formatDate(new Date(host?.createdAt))}
-                  <br />
-                  Purchased at: {formatDate(new Date(host?.purchasedAt))}
-                  <br />
-                  Renew Date: {formatRenewalDate(new Date(host?.purchasedAt))}
-                  <p>price : ₹ {host?.price}</p>
+                </span>
+                <span className="space-y-1 text-gray-700 font-semibold w-full flex items-center justify-between">
+                  Purchased Date: {formatDate(new Date(host?.purchasedAt))}
+                  <EditBox
+                    name={"Purchased Date"}
+                    value={host?.purchasedAt}
+                    onChange={(e) =>
+                      setValue({ ...value, hostingDate: e.target.value })
+                    }
+                    updateInfo={updateHosting}
+                  />
+                </span>
+                <span className="space-y-1 text-gray-700 font-semibold w-full flex items-center justify-between">
+                  Renew Date: {formatDate(new Date(host?.renewAt))}
+                  <EditBox
+                    name={"Renew Date"}
+                    value={host?.renewAt}
+                    onChange={(e) =>
+                      setValue({ ...value, hostingRenew: e.target.value })
+                    }
+                    updateInfo={updateHosting}
+                  />
+                </span>
+                <span className="space-y-1 text-gray-700 font-semibold w-full flex items-center justify-between">
+                  Price: ₹ {host?.price}
+                  <EditBox
+                    name={"Hosting Price"}
+                    value={host?.price}
+                    onChange={(e) =>
+                      setValue({ ...value, hostingPrice: e.target.value })
+                    }
+                    updateInfo={updateHosting}
+                  />
                 </span>
               </div>
-              <div className="flex flex-col gap-2">
-                <EditBox
-                  name={"Hosting Date"}
-                  value={host?.purchasedAt}
-                  onChange={(e) =>
-                    setValue({ ...value, hostingDate: e.target.value })
-                  }
-                  updateInfo={updateHosting}
-                />
-                <EditBox
-                  name={"Hosting Price"}
-                  value={host?.price}
-                  onChange={(e) =>
-                    setValue({ ...value, hostingPrice: e.target.value })
-                  }
-                  updateInfo={updateHosting}
-                />
-              </div>
-            </Card>
-          ))}
-          {/* cPanel */}
-          {user?.data?.cpanel?.map((cpanel) => (
-            <Card
-              key={cpanel?.id}
-              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
-            >
-              <div className="flex items-start justify-between w-full">
-                <div className="flex flex-col items-start justify-start gap-2">
-                  <CardTitle className="text-base font-bold">
-                    Cpanel URL:
-                  </CardTitle>
-                  <span className="text-gray-700 font-semibold">
-                    <a
-                      target="_blank"
-                      href={cpanel?.cpanelId}
-                      className="text-blue-600 font-semibold hover:underline"
-                    >
-                      {cpanel?.cpanelId}
-                    </a>
-                  </span>
-                </div>
-                <EditBox
-                  name={"Cpanel"}
-                  value={cpanel?.cpanelId}
-                  onChange={(e) =>
-                    setValue({ ...value, cpanel: e.target.value })
-                  }
-                  updateInfo={updateCpanel}
-                />
-              </div>
+              <div className="flex flex-col gap-2"></div>
             </Card>
           ))}
           {/* Dashboard  login URL*/}
@@ -346,7 +325,7 @@ const User = () => {
           {user?.data?.dashboard?.map((dash) => (
             <Card
               key={dash.id}
-              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex"
+              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-between items-center flex h-min"
             >
               <div className="w-full flex flex-col items-start justify-start gap-2">
                 <CardTitle className="text-base font-bold">
@@ -415,6 +394,38 @@ const User = () => {
                       updateInfo={updateDashboard}
                     />
                   </div>
+                </div>
+              </div>
+            </Card>
+          ))}
+          {/* cPanel */}
+          {user?.data?.cpanel?.map((cpanel) => (
+            <Card
+              key={cpanel?.id}
+              className="p-2 text-gray-900 border-gray-400 shadow w-full justify-start items-center flex h-min"
+            >
+              <div className="flex items-start justify-between w-full">
+                <div className="flex flex-col items-start justify-start gap-2 w-full">
+                  <CardTitle className="text-base font-bold">
+                    Cpanel URL:
+                  </CardTitle>
+                  <span className="text-gray-700 font-semibold w-full flex items-center justify-between">
+                    <a
+                      target="_blank"
+                      href={cpanel?.cpanelId}
+                      className="text-blue-600 font-semibold hover:underline"
+                    >
+                      {cpanel?.cpanelId}
+                    </a>
+                    <EditBox
+                      name={"Cpanel"}
+                      value={cpanel?.cpanelId}
+                      onChange={(e) =>
+                        setValue({ ...value, cpanel: e.target.value })
+                      }
+                      updateInfo={updateCpanel}
+                    />
+                  </span>
                 </div>
               </div>
             </Card>

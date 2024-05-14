@@ -24,15 +24,6 @@ const AllUserTable = () => {
     const options = { month: "numeric", day: "numeric", year: "numeric" };
     return date.toLocaleDateString("en-US", options);
   }
-  function formatRenewalDate(date) {
-    const renewalDate = new Date(
-      date.getFullYear() + 1,
-      date.getMonth(),
-      date.getDate()
-    );
-    const options = { month: "numeric", day: "numeric", year: "numeric" };
-    return renewalDate.toLocaleDateString("en-US", options);
-  }
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
