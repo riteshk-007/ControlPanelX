@@ -50,6 +50,7 @@ export const POST = async (req) => {
         },
         hosting: {
           select: {
+            id: true,
             price: true,
             purchasedAt: true,
           },
