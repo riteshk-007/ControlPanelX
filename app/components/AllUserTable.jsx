@@ -211,7 +211,7 @@ const AllUserTable = () => {
                       <span key={hosting?.id} className="text-black">
                         <span className="text-[#FF6347]">
                           {" "}
-                          <p className="hidden lg:block">Join Date: </p>
+                          <p className="hidden lg:block">Purchased: </p>
                           {formatDate(new Date(hosting?.purchasedAt))}
                         </span>
                         <br />

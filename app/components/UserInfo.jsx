@@ -184,7 +184,9 @@ const UserInfo = ({ session }) => {
               <div className="flex flex-col items-start justify-start gap-2">
                 <CardTitle className="text-base font-bold">Hosting:</CardTitle>
                 <CardDescription className="space-y-1 text-gray-700 font-semibold">
-                  Join Date: {formatDate(new Date(host?.purchasedAt))}
+                  join Date: {formatDate(new Date(host?.createdAt))}
+                  <br />
+                  Purchased at : {formatDate(new Date(host?.purchasedAt))}
                   <br />
                   Renew Date: {formatRenewalDate(new Date(host?.purchasedAt))}
                 </CardDescription>
