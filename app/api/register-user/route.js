@@ -17,7 +17,7 @@ export const POST = async (req) => {
   try {
     if (
       [name, phone, email, password].some(
-        (field) => String(field)?.trim() === ""
+        (field) => field === undefined || String(field).trim() === ""
       )
     ) {
       return NextResponse.json({

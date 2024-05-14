@@ -2,6 +2,7 @@
 import { CreateUser } from "@/helper/CreateUserSlice";
 import { useForm, useWatch } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import bcrypt from "bcryptjs";
 
 const CreateUserform = () => {
   const {
@@ -16,7 +17,7 @@ const CreateUserform = () => {
     name: ["domains", "hosting", "dashboard", "cpanel"],
   });
   const dispatch = useDispatch();
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (data.domains) {
       data.domains = data.domains.filter(
         (domain) => domain.price.trim() !== ""
@@ -35,9 +36,16 @@ const CreateUserform = () => {
     }
     if (data.cpanel) {
       data.cpanel = data.cpanel.filter(
-        (cpanel) =>
-          cpanel.cpanelId.trim() !== "" && cpanel.password.trim() !== ""
+        (cpanel) => cpanel.cpanelId.trim() !== ""
       );
+    }
+    if (data.dashboard) {
+      for (let dashboard of data.dashboard) {
+        if (dashboard.password) {
+          const salt = await bcrypt.genSalt(10);
+          dashboard.password = await bcrypt.hash(dashboard.password, salt);
+        }
+      }
     }
     dispatch(CreateUser(data));
   };
@@ -164,6 +172,26 @@ const CreateUserform = () => {
           Hosting
         </label>
         <div>
+          <label htmlFor="createdAt" className="block font-bold mb-2">
+            Join Date
+          </label>
+          <input
+            type="date"
+            id="hosting.0.createdAt"
+            className="w-full px-3 py-2 border border-gray-300 rounded mb-2"
+            placeholder="Join Date"
+            {...register("hosting.0.createdAt", {
+              required: watchedFields?.hosting?.some((field) => !!field),
+            })}
+          />
+          {errors.hosting?.[0]?.createdAt && (
+            <p className="text-red-500">
+              {errors.hosting[0].createdAt.message}
+            </p>
+          )}
+          <label htmlFor="purchasedAt" className="block font-bold mb-2">
+            Purchase Date
+          </label>
           <input
             type="date"
             id="hosting.0.purchasedAt"
@@ -259,18 +287,6 @@ const CreateUserform = () => {
           />
           {errors.cpanel?.[0]?.cpanelId && (
             <p className="text-red-500">{errors.cpanel[0].cpanelId.message}</p>
-          )}
-          <input
-            type="password"
-            id="cpanel.0.password"
-            className="w-full px-3 py-2 border border-gray-300 rounded"
-            placeholder="cPanel Password"
-            {...register("cpanel.0.password", {
-              required: watchedFields?.cpanel?.some((field) => !!field),
-            })}
-          />
-          {errors.cpanel?.[0]?.password && (
-            <p className="text-red-500">{errors.cpanel[0].password.message}</p>
           )}
         </div>
       </div>
