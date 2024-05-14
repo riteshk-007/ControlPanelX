@@ -1,5 +1,6 @@
 "use client";
 import { CreateUser } from "@/helper/CreateUserSlice";
+import { useEffect } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useDispatch } from "react-redux";
 
@@ -7,6 +8,8 @@ const CreateUserform = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    reset,
     formState: { errors },
     control,
   } = useForm();
@@ -39,7 +42,22 @@ const CreateUserform = () => {
       );
     }
     dispatch(CreateUser(data));
+    reset();
   };
+  const purchasedAt = useWatch({
+    control,
+    name: "hosting.0.purchasedAt",
+  });
+
+  useEffect(() => {
+    if (purchasedAt) {
+      const purchasedDate = new Date(purchasedAt);
+      const renewAtDate = new Date(
+        purchasedDate.setFullYear(purchasedDate.getFullYear() + 1)
+      );
+      setValue("hosting.0.renewAt", renewAtDate.toISOString().split("T")[0]);
+    }
+  }, [purchasedAt, setValue]);
   return (
     <form onSubmit={handleSubmit(onSubmit)} className=" mx-auto">
       <div className="mb-4">
@@ -196,6 +214,21 @@ const CreateUserform = () => {
             <p className="text-red-500">
               {errors.hosting[0].purchasedAt.message}
             </p>
+          )}
+          <label htmlFor="purchasedAt" className="block font-bold mb-2">
+            Renewal Date
+          </label>
+          <input
+            type="date"
+            id="hosting.0.renewAt"
+            className="w-full px-3 py-2 border border-gray-300 rounded mb-2"
+            placeholder="Renew At"
+            {...register("hosting.0.renewAt", {
+              required: watchedFields?.hosting?.some((field) => !!field),
+            })}
+          />
+          {errors.hosting?.[0]?.renewAt && (
+            <p className="text-red-500">{errors.hosting[0].renewAt.message}</p>
           )}
           <input
             type="number"

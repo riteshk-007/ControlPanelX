@@ -45,6 +45,7 @@ model Hosting {
   userId      String?   @db.ObjectId
   createdAt   String
   purchasedAt String
+  renewAt     String
   price       Float
 }
 
