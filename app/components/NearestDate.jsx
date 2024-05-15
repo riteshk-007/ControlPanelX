@@ -86,6 +86,16 @@ const NearestDate = () => {
     return { bgColor: "bg-white", textColor: "text-gray-900" };
   };
 
+  if (sortedHostingRenewalDates.every((hosting) => hosting.diffInDays > 100)) {
+    return (
+      <div className="mt-5 w-full">
+        <p className="text-gray-900 border-gray-400 bg-white p-5 shadow-md mt-5 rounded-lg text-center font-bold border capitalize">
+          No users have less than 100 days until their hosting renewal.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <Card
       className=" text-gray-900 border-gray-400 shadow-md mt-5 rounded-lg overflow-x-auto"
