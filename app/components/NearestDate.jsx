@@ -98,62 +98,67 @@ const NearestDate = () => {
             No data available
           </p>
         ) : (
-          sortedHostingRenewalDates.map((hosting) => (
-            <div
-              key={hosting.id}
-              className={`py-4 px-6 rounded-md mb-2 shadow-md flex items-center justify-between ${
-                getColor(hosting.diffInDays).bgColor
-              }`}
-            >
-              <div>
-                <p
-                  className={`text-sm ${
-                    getColor(hosting.diffInDays).textColor
-                  }`}
-                >
-                  User Name:{" "}
-                  <span className="font-semibold">{hosting.user.name}</span>
-                </p>
-                <p
-                  className={`text-sm ${
-                    getColor(hosting.diffInDays).textColor
-                  }`}
-                >
-                  Phone:{" "}
-                  <span className="font-semibold">{hosting.user.phone}</span>
-                </p>
-                <p
-                  className={`text-sm ${
-                    getColor(hosting.diffInDays).textColor
-                  }`}
-                >
-                  Purchased At:{" "}
-                  <span className="font-semibold">
-                    {new Date(hosting.purchasedAt).toLocaleDateString()}
-                  </span>
-                </p>
-                <p
-                  className={`text-sm ${
-                    getColor(hosting.diffInDays).textColor
-                  }`}
-                >
-                  Renew At:{" "}
-                  <span className="font-semibold">
-                    {new Date(hosting.renewAt).toLocaleDateString()}
-                  </span>
-                </p>
+          sortedHostingRenewalDates.map((hosting) => {
+            if (hosting.diffInDays > 100) {
+              return null; // Skip this user if renewal days are more than 100
+            }
+            return (
+              <div
+                key={hosting.id}
+                className={`py-4 px-6 rounded-md mb-2 shadow-md flex items-center justify-between ${
+                  getColor(hosting.diffInDays).bgColor
+                }`}
+              >
+                <div>
+                  <p
+                    className={`text-sm ${
+                      getColor(hosting.diffInDays).textColor
+                    }`}
+                  >
+                    User Name:{" "}
+                    <span className="font-semibold">{hosting.user.name}</span>
+                  </p>
+                  <p
+                    className={`text-sm ${
+                      getColor(hosting.diffInDays).textColor
+                    }`}
+                  >
+                    Phone:{" "}
+                    <span className="font-semibold">{hosting.user.phone}</span>
+                  </p>
+                  <p
+                    className={`text-sm ${
+                      getColor(hosting.diffInDays).textColor
+                    }`}
+                  >
+                    Purchased At:{" "}
+                    <span className="font-semibold">
+                      {new Date(hosting.purchasedAt).toLocaleDateString()}
+                    </span>
+                  </p>
+                  <p
+                    className={`text-sm ${
+                      getColor(hosting.diffInDays).textColor
+                    }`}
+                  >
+                    Renew At:{" "}
+                    <span className="font-semibold">
+                      {new Date(hosting.renewAt).toLocaleDateString()}
+                    </span>
+                  </p>
+                </div>
+                <div className="text-right">
+                  <p
+                    className={`text-sm font-semibold ${
+                      getColor(hosting.diffInDays).textColor
+                    }`}
+                  >
+                    Days until renewal: {hosting.diffInDays}
+                  </p>
+                </div>
               </div>
-              <div className="text-right">
-                <p
-                  className={`text-sm font-semibold ${
-                    getColor(hosting.diffInDays).textColor
-                  }`}
-                >
-                  Days until renewal: {hosting.diffInDays}
-                </p>
-              </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </Card>
