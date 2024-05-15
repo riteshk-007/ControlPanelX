@@ -70,7 +70,7 @@ const SideNav = () => {
                         href={link.link}
                         className={`flex items-center justify-center md:justify-normal gap-3 rounded-lg px-3 py-2 transition-all hover:text-gray-500 text-gray-900 `}
                       >
-                        <Icon className="md:h-4 md:w-4 w-5 h-5" />
+                        <Icon className="w-5 h-5" />
                         <span className="md:block hidden">{link.name}</span>
                       </Link>
                       <div className="block md:hidden">
