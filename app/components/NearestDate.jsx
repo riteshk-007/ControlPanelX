@@ -9,6 +9,7 @@ const NearestDate = ({ users }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedLanguage, setSelectedLanguage] = useState("English");
 
   useEffect(() => {
     const fetchData = () => {
@@ -23,6 +24,44 @@ const NearestDate = ({ users }) => {
 
     fetchData();
   }, [dispatch]);
+
+  // send message to client
+  const sendWhatsAppMessage = (hosting) => {
+    const message = generateMessage(hosting);
+    const url = `https://api.whatsapp.com/send?phone=${
+      hosting.user.phone
+    }&text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  };
+
+  const generateMessage = (hosting) => {
+    switch (selectedLanguage) {
+      case "Hindi":
+        return `सर, आपकी होस्टिंग ${
+          hosting.diffInDays
+        } दिनों में समाप्त होने वाली है। आपने ${new Date(
+          hosting.purchasedAt
+        ).toLocaleDateString()} को खरीदी थी और यह ${new Date(
+          hosting.renewAt
+        ).toLocaleDateString()} को समाप्त होगी। कृपया अपनी होस्टिंग को नवीनीकरण करें ताकि आपकी साइट बिना रुके चलती रहे।`;
+      case "Hinglish":
+        return `Sir, aapki hosting ${
+          hosting.diffInDays
+        } dino me samapt hone wali hai. Aapne ${new Date(
+          hosting.purchasedAt
+        ).toLocaleDateString()} ko kharidi thi aur yeh ${new Date(
+          hosting.renewAt
+        ).toLocaleDateString()} ko samapt hogi. Kripya apni hosting ko renew karwa le taki aapki site bina ruke chalti rahe.`;
+      default:
+        return `Sir, your hosting is going to end in ${
+          hosting.diffInDays
+        } days. You purchased it on ${new Date(
+          hosting.purchasedAt
+        ).toLocaleDateString()} and it will end on ${new Date(
+          hosting.renewAt
+        ).toLocaleDateString()}. Please renew your hosting so that your site continues to run without interruption.`;
+    }
+  };
 
   if (loading) {
     return (
@@ -111,7 +150,7 @@ const NearestDate = ({ users }) => {
             return (
               <div
                 key={hosting.id}
-                className={`py-4 px-6 rounded-md mb-2 shadow-md flex items-center justify-between ${
+                className={`py-4 px-6 rounded-md mb-2 shadow-md gap-5 md:flex items-center justify-between ${
                   getColor(hosting.diffInDays).bgColor
                 }`}
               >
@@ -121,7 +160,7 @@ const NearestDate = ({ users }) => {
                       getColor(hosting.diffInDays).textColor
                     }`}
                   >
-                    User Name:{" "}
+                    Name:{" "}
                     <span className="font-semibold">{hosting.user.name}</span>
                   </p>
                   <p
@@ -153,7 +192,7 @@ const NearestDate = ({ users }) => {
                     </span>
                   </p>
                 </div>
-                <div className="text-right">
+                <div className="md:text-right h-full flex flex-col gap-2 md:items-end mt-5 md:mt-0">
                   <p
                     className={`text-sm font-semibold ${
                       getColor(hosting.diffInDays).textColor
@@ -161,6 +200,21 @@ const NearestDate = ({ users }) => {
                   >
                     Days until renewal: {hosting.diffInDays}
                   </p>
+                  <select
+                    value={selectedLanguage}
+                    onChange={(e) => setSelectedLanguage(e.target.value)}
+                    className="md:w-32 py-1 px-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-sm"
+                  >
+                    <option value="English">English</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Hinglish">Hinglish</option>
+                  </select>
+                  <button
+                    onClick={() => sendWhatsAppMessage(hosting)}
+                    className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline text-sm"
+                  >
+                    Reminder
+                  </button>
                 </div>
               </div>
             );
