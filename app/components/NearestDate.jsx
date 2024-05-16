@@ -2,10 +2,10 @@
 import { Card } from "@/components/ui/card";
 import { getAllUsers } from "@/helper/AnyUser";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import SkeletonCard from "./Skeleton";
 
-const NearestDate = () => {
+const NearestDate = ({ users }) => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,10 +23,6 @@ const NearestDate = () => {
 
     fetchData();
   }, [dispatch]);
-
-  const users =
-    useSelector((state) => (state?.user?.user ? state.user.user.data : [])) ||
-    [];
 
   if (loading) {
     return (

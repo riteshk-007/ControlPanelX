@@ -3,18 +3,14 @@ import { Card } from "@/components/ui/card";
 import { getAllUsers } from "@/helper/AnyUser";
 import { IndianRupee } from "lucide-react";
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-const TotalUsersAmt = () => {
+const TotalUsersAmt = ({ users }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllUsers());
   }, [dispatch]);
-
-  const users =
-    useSelector((state) => (state?.user?.user ? state.user.user.data : [])) ||
-    [];
 
   function calculateTotalAmount(users) {
     if (!users || !Array.isArray(users)) {
