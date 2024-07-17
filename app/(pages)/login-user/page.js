@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
+import TestUser from "./Testuser";
 
 const AdminForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -90,6 +91,8 @@ const AdminForm = () => {
             >
               Log in
             </Button>
+
+            <TestUser />
           </form>
         </div>
       </div>
